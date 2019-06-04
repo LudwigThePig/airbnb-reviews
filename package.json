@@ -1,0 +1,70 @@
+{
+  "name": "reviews",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server/server.js",
+  "dependencies": {
+    "@quickbaseoss/babel-plugin-styled-components-css-namespace": "^1.0.0-rc",
+    "aws-sdk": "^2.461.0",
+    "axios": "^0.19.0",
+    "babel-loader": "^8.0.6",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "eslint": "^5.16.0",
+    "eslint-config-hackreactor": "github:hackreactor-labs/eslint-config-hackreactor",
+    "express": "^4.17.0",
+    "knex": "^0.16.5",
+    "moment": "^2.24.0",
+    "pg": "^7.11.0",
+    "random-profile-generator": "^2.3.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "^3.0.1",
+    "styled-components": "^4.2.0",
+    "underscore": "^1.9.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/preset-react": "^7.0.0",
+    "babel-jest": "^24.8.0",
+    "babel-plugin-styled-components": "^1.10.0",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.13.1",
+    "faker": "^4.1.0",
+    "jest": "^24.8.0",
+    "jest-dom": "^3.2.2",
+    "jest-enzyme": "^7.0.2",
+    "json-loader": "^0.5.7",
+    "node-sass": "^4.12.0",
+    "react-test-renderer": "^16.8.6",
+    "sass-loader": "^7.1.0",
+    "sharp": "^0.22.1",
+    "supertest": "^4.0.2",
+    "webpack": "^4.32.2",
+    "webpack-cli": "^3.3.2"
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>/client/setupTest.js"
+    ]
+  },
+  "scripts": {
+    "test": "jest",
+    "start": "node server/server.js",
+    "react-dev": "webpack -d --watch",
+    "sass-dev": "sass --watch client:public",
+    "seed": "knex migrate:rollback; knex migrate:latest; knex seed:run",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fourprofessionalguys/reviews.git"
+  },
+  "author": "cliff dagostino",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fourprofessionalguys/reviews/issues"
+  },
+  "homepage": "https://github.com/fourprofessionalguys/reviews#readme"
+}
