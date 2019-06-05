@@ -54,7 +54,9 @@
     "start": "node server/server.js",
     "react-dev": "webpack -d --watch",
     "sass-dev": "sass --watch client:public",
-    "seed": "knex migrate:rollback; knex migrate:latest; knex seed:run",
+    "dbinit": "psql -d postgres -U postgres -f ./server/db/schema.sql",
+    "seed": "node ./server/db/seed.js",
+    "knex": "knex migrate:rollback; knex migrate:latest; knex seed:run",
     "build": "webpack"
   },
   "repository": {

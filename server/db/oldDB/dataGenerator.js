@@ -182,7 +182,7 @@ const generateOneListing = function generateOneListing(url) {
 const generateOneReview = function generateOneReview() {
   return {
     text: generateRandomReview(),
-    date: faker.date.past()
+    date: faker.date.past(),
   }
 };
 

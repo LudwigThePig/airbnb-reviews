@@ -4,9 +4,9 @@ module.exports = {
     client: 'pg',
     connection: {
       user: 'postgres',
-      host: 'localhost',
+      // host: 'localhost',
       password: 'rei',
-      database: 'reviewsdb'
+      database: 'airbnb_clone_reviews'
     },
     useNullAsDefault: true,
     charset: 'utf8',
