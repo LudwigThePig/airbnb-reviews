@@ -5,8 +5,9 @@ CREATE DATABASE airbnb_reviews;
 DROP TABLE IF EXISTS reviews;
 
 CREATE UNLOGGED TABLE reviews (
-  "text" VARCHAR NOT NULL,
-  "date" date NOT NULL,
-  "guest" VARCHAR NOT NULL,
-  "photo" VARCHAR NOT NULL
+  id SERIAL NOT NULL,
+  text VARCHAR NOT NULL,
+  date date NOT NULL,
+  guest VARCHAR NOT NULL,
+  photo VARCHAR NOT NULL
 );

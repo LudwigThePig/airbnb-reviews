@@ -61,7 +61,13 @@ const generateRandomUserPhoto = () => {
   return randomSelect(userPhotos);
 };
 
-const createSeed = (num) => {
+const start = () => {
+  pool.query('BEGIN TRANSACTION', err => {
+    err ? console.log(err) : console.log('COMMENCE TRANSACTION')
+  })
+}
+
+const insert = (num) => {
   const queryString = 'INSERT INTO reviews (text, date, guest, photo) VALUES ($1,$2,$3,$4)';
   let params;
   for (let i = 0; i < num; i += 1) {
@@ -71,15 +77,32 @@ const createSeed = (num) => {
       faker.name.firstName(),
       generateRandomUserPhoto()
     ];
-    console.log(params);
+    if (i === 60000) {
+      console.log('We made it to ', i,'!')
+    }
     pool.query(queryString, params, err => {
       if (err) {
-        return console.error(err.message);
+        return console.log(err);
       }
     });
   }
 };
 
-createSeed(2);
+const end = () => {
+  pool.query('END TRANSACTION', err => {
+    return err ? console.log(err) : console.log('all done :)');
+  })
+}
 
-module.exports = createSeed;
+const seed = (num) => {
+  return Promise.resolve(start())
+    .then(() => insert(num))
+    .then(() => end());
+}
+
+for (let i = 0; i < 40; i++) {
+  console.log(i * 250000);
+  seed(100000);
+}
+
+module.exports = insert;
