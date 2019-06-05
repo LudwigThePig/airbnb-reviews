@@ -1,6 +1,6 @@
-### AIRBNB_CLONE PROJECT ###
+### AirBnB System Design Capston ###
 
-This is the reviews component of my team's project mocking an airbnb page for a listing.
+This is the reviews component  of AirBnB's website that has been scaled up to 10,000 requests per second.
 
 KEY TECHNOLOGIES:
 - Express node framework
@@ -19,16 +19,3 @@ HOW TO RUN THIS PROJECT:
 	'npm run react-dev'
 - this will start the local server on port 3003 and build the webpack bundle.js file
 - navigate to http://localhost:3003 to see the results!
-
-PROJECT STRUCTURE:
-- Client directory contains all React Components (with tests) to be bundled
-- Public directory contains the bundled webpack file bundle.js and index.html
-- Server directory contains
-	- the express server file server.js
-	- db directory containing
-		- knex migration/seed folders/files 
-		- dataGenerator.js for building fake data
-	- __test__ containing basic database tests in jest
-- downloadImages.js for downloading/resizing images from Unsplash.com to be used for listing, user, and host photos
-- config files
-	- webpack/babelrc/package.json
