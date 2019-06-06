@@ -1,13 +1,13 @@
 // Imports
+require('dotenv').config()
+const database = require('./dbrouter.js');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const database = require('./db/index.js');
 
 // Configuration
 const app = express();
-require('dotenv').config()
 // Middleware
 app.use(express.static('public'));
 app.use(bodyParser.json());
