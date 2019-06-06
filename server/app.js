@@ -3,7 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const database = require('./db/dbConfig.js')
+const database = require('./db/index.js');
 
 // Configuration
 const app = express();

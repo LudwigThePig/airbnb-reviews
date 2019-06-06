@@ -3,8 +3,7 @@ from string import Template
 import random
 fake = Faker()
 
-f = open('insert.sql', 'w+')
-templ = "($text, $date, $guest, $photo)"
+templ = "(\'$text\', \'$date\', \'$guest\', \'$photo\')"
 randomText = [
   "Awesome", 'OMG! ', 'JUST. WOW. ', '', '', 'What a blast! ', 'My wife and I really enjoyed the location. ', '', 'Good news everyone! ', 'Very clean and beautiful decore! ', 'Great space. ', 'Unfuhgetable! ', 'It was meh. ', 'It was nice. ', 'From the moment I saw the place I knew it would be a trainwreck. ', 'WARNING: not as advertised. ', 'just as advertised.', 'just what the doctor ordered.', 'breath taking.', 'cute and cozy.', 'lovely.'
 ]
@@ -44,13 +43,24 @@ photos = [
   'https://s3.amazonaws.com/airbnbcloneuserphotos/225x225_yki80w96VZ0.jpeg'
 ]
 
-for i in range (1000):
-  
-  values=Template(templ).substitute(
-    text=fake.sentence(ext_word_list=randomText),
-    date=fake.past_date(start_date="-30d", tzinfo=None),
-    guest=fake.name(),
-    photo=random.choice(photos),
-  ) 
-  print(values)
-  f.write(values)
+innerLoop=20
+f = open('insert2.sql', 'w+')
+# f.close()
+f.write('\\c airbnb_reviews \r\n')
+# f = open('inser.sql', 'a+')
+for i in range (100000):
+  f.write("INSERT INTO reviews (text, date, guest, photo) VALUES ")
+  for j in range (innerLoop):
+    values=Template(templ).substitute(
+      text=fake.sentence(ext_word_list=randomText, nb_words=3),
+      date=fake.date(pattern="%Y-%m-%d", end_datetime=None),
+      guest=fake.name().split()[0],
+      photo=random.choice(photos),
+    )
+    f.write(values)
+    if j != innerLoop - 1:
+      f.write(', ')
+    else:
+      f.write(';\r\n')
+  # f.write("\r\n")
+f.close()
