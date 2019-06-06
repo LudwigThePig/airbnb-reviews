@@ -5,3 +5,4 @@ images/
 node_modules/
 unSplashApiKey.js
 insert.sql
+.env
