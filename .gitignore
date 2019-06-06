@@ -4,3 +4,4 @@ coverage
 images/
 node_modules/
 unSplashApiKey.js
+insert.sql

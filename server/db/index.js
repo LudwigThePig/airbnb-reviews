@@ -13,8 +13,9 @@ const pool = process.env.NODE_ENV === 'production'
     port: '5432',
   });
 
-const getReviews = (cb) => {
-  const queryString = 'SELECT * FROM reviews ORDER BY RANDOM() LIMIT 10;';
+const getReviews = (id, cb) => {
+  console.log(id);
+  const queryString = 'SELECT * FROM reviews LIMIT 15;';
   pool.query(queryString, (err, result) => {
     if (err) {
       console.log(err);
