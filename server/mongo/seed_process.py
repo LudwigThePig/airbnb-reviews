@@ -7,7 +7,6 @@ from faker import Faker
 from datetime import datetime
 fake = Faker()
 
-templ = "(\'$text\', \'$date\', \'$guest\', \'$photo\')"
 randomText = [
   "Awesome", 'OMG! ', 'JUST. WOW. ', '', '', 'What a blast! ', 'My wife and I really enjoyed the location. ', '', 'Good news everyone! ', 'Very clean and beautiful decore! ', 'Great space. ', 'Unfuhgetable! ', 'It was meh. ', 'It was nice. ', 'From the moment I saw the place I knew it would be a trainwreck. ', 'WARNING: not as advertised. ', 'just as advertised.', 'just what the doctor ordered.', 'breath taking.', 'cute and cozy.', 'lovely.'
 ]
@@ -48,9 +47,6 @@ photos = [
 ]
 
  
-min_date = datetime(2012, 1, 1)
-max_date = datetime(2013, 1, 1)
-delta = (max_date - min_date).total_seconds()
  
 job_id = '1'
  

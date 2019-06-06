@@ -7,7 +7,7 @@ const database = require('./db/index.js');
 
 // Configuration
 const app = express();
-
+require('dotenv').config()
 // Middleware
 app.use(express.static('public'));
 app.use(bodyParser.json());

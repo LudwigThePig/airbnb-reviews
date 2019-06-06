@@ -43,10 +43,11 @@ photos = [
   'https://s3.amazonaws.com/airbnbcloneuserphotos/225x225_yki80w96VZ0.jpeg'
 ]
 
-innerLoop=20
+outerLoop = 400000
+innerLoop = 25
 f = open('insert2.sql', 'w+')
 f.write('\\c airbnb_reviews \r\n')
-for i in range (100000):
+for i in range (outerLoop):
   f.write("INSERT INTO reviews (text, date, guest, photo) VALUES ")
   for j in range (innerLoop):
     values=Template(templ).substitute(
