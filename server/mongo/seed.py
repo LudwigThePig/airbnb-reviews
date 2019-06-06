@@ -9,30 +9,30 @@ from datetime import datetime
 cpu_count = multiprocessing.cpu_count()
  
 # obtain a mongo connection
-connection = pymongo.Connection('mongodb://localhost', safe=True)
+client = pymongo.MongoClient('mongodb://localhost')#, safe=True)
  
 # obtain a handle to the random database
-db = connection.airbnb_reviews
-collection = db.reviews
+db = client.airbnb_reviews
+collection = client.airbnb_reviews.reviews#db.reviews
  
-total_documents_count = 10000000;
+total_documents_count = 10000000
 inserted_documents_count = 0
 sleep_seconds = 1
 sleep_count = 0
- 
+
 for i in range(cpu_count):
     documents_number = str(total_documents_count/cpu_count)
-    print documents_number
-    subprocess.Popen(['python', './seed_process.py', documents_number, str(i)])
+    print(documents_number)
+    subprocess.Popen(['python', 'C:/code/hr/SDC/reviews/server/mongo/seed_process.py', documents_number, str(i)])
  
-start = datetime.now();
+start = datetime.now()
  
 while (inserted_documents_count < total_documents_count) is True:
     inserted_documents_count = collection.count()
     if (sleep_count > 0 and sleep_count % 60 == 0): 
-        print 'Inserted ', inserted_documents_count, ' documents.'     
+        print('Inserted ', inserted_documents_count, ' documents.')
     if (inserted_documents_count < total_documents_count):
         sleep_count += 1
         time.sleep(sleep_seconds)  
  
-print 'Inserting ', total_documents_count, ' took ', (datetime.now() - start).total_seconds(), 's'     
+print('Inserting ', total_documents_count, ' took ', (datetime.now() - start).total_seconds(), 's')

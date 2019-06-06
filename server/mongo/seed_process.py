@@ -59,20 +59,20 @@ if len(sys.argv) < 2:
 elif len(sys.argv) > 2:
     job_id = sys.argv[2]   
  
-documents_number = int(sys.argv[1])
-batch_number = 5 * 1000;
+documents_number = int(sys.argv[1].split('.')[0])
+batch_number = 5 * 1000
  
 job_name = 'Job#' + job_id
-start = datetime.now();
+start = datetime.now()
  
 # obtain a mongo connection
-connection = pymongo.Connection("mongodb://localhost", safe=True)
+connection = pymongo.MongoClient("mongodb://localhost")#, safe=True)
  
 # obtain a handle to the random database
 db = connection.airbnb_reviews
 collection = db.reviews
  
-batch_documents = [i for i in range(batch_number)];
+batch_documents = [i for i in range(batch_number)]
  
 for index in range(documents_number):
     try:           
@@ -89,8 +89,8 @@ for index in range(documents_number):
             collection.insert(batch_documents)     
         index += 1;
         if index % 100000 == 0:
-            print job_name, ' inserted ', index, ' documents.'     
+            print(job_name, ' inserted ', index, ' documents.')
     except:
-        print 'Unexpected error:', sys.exc_info()[0], ', for index ', index
+        print('Unexpected error:', sys.exc_info()[0], ', for index ', index)
         raise
-print job_name, ' inserted ', documents_number, ' in ', (datetime.now() - start).total_seconds(), 's'
+print(job_name, ' inserted ', documents_number, ' in ', (datetime.now() - start).total_seconds(), 's')
