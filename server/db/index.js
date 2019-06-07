@@ -13,7 +13,7 @@ const pool = process.env.NODE_ENV === 'production'
     port: '5432',
   });
 
-const getReviews = (id, cb) => {
+const getReviews = (id, db, cb) => {
   console.log('you are using postgres!');
   const queryString = `SELECT * FROM reviews LIMIT 15 OFFSET ${Number(id)};`;
   pool.query(queryString, (err, result) => {

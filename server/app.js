@@ -1,5 +1,6 @@
 // Imports
 require('dotenv').config()
+require('newrelic');
 const database = require('./dbrouter.js');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -16,7 +17,9 @@ app.use(cors());
 // Routes
 app.get('/api/listings/reviews/:id', (req, res) => {
   let listing_id = req.params.id;
-  database.getReviews(listing_id, (err, data) => {
+  const db = req.app.locals.db || null;
+
+  database.getReviews(listing_id, db, (err, data) => {
     if (err) {
       res.status(400)
         .json({message: err});
