@@ -59,17 +59,16 @@ delta = (max_date - min_date).total_seconds()
 job_id = '1'
  
 if len(sys.argv) < 2:
-    sys.exit("You must supply the item_number argument")
+    sys.exit('You must supply the item_number argument')
 elif len(sys.argv) > 2:
     job_id = sys.argv[2]   
  
 documents_number = int(sys.argv[1].split('.')[0])
-batch_number = 5#5 * 1000
-print(documents_number)
+batch_number = 5 * 1000
 job_name = 'Job#' + job_id
 start = datetime.now()
  
-connection = pymongo.MongoClient("mongodb://localhost") 
+connection = pymongo.MongoClient('mongodb://localhost') 
 db = connection.airbnb_reviews
 collection = db.reviews2
  
@@ -78,11 +77,11 @@ batch_documents = [i for i in range(batch_number)]
 for index in range(documents_number):
     try:
         random_review = random.choice(starter) + 'The host was ' + random.choice(hostAdjective) +  ' and the ' + random.choice(location) + ' was ' + random.choice(locationAdjective) + 'The ' + random.choice(['two', 'three', 'four', 'five']) + ' days I spent there were ' + random.choice(stayAdjective) + ' ' + random.choice(ending) + 'I' + random.choice(ending2)
-        docId = (index + 1) + ((int(job_id) + 1) * 1000)
+        docId = (index + 1) + ((int(job_id)) * documents_number)
         document = {
             '_id' : docId,
             'text' : random_review,
-            'date' : fake.date(pattern="%Y-%m-%d", end_datetime=None),
+            'date' : fake.date(pattern='%Y-%m-%d', end_datetime=None),
             'guest': fake.name().split()[0],
             'photo': random.choice(photos)
         }

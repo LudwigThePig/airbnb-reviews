@@ -15,7 +15,7 @@ client = pymongo.MongoClient('mongodb://localhost')
 db = client.airbnb_reviews
 collection = client.airbnb_reviews.reviews2
  
-total_documents_count = 1000#10000000
+total_documents_count = 10000000
 inserted_documents_count = 0
 sleep_seconds = 1
 sleep_count = 0
