@@ -9,11 +9,11 @@ from datetime import datetime
 cpu_count = multiprocessing.cpu_count()
  
 # obtain a mongo connection
-client = pymongo.MongoClient('mongodb://localhost')#, safe=True)
+client = mongo.MongoClient('mongodb://localhost')
  
 # obtain a handle to the random database
 db = client.airbnb_reviews
-collection = client.airbnb_reviews.reviews#db.reviews
+collection = client.airbnb_reviews.reviews
  
 total_documents_count = 10000000
 inserted_documents_count = 0

@@ -15,7 +15,7 @@ const pool = process.env.NODE_ENV === 'production'
 
 const getReviews = (id, cb) => {
   console.log('you are using postgres!');
-  const queryString = 'SELECT * FROM reviews LIMIT 15;';
+  const queryString = `SELECT * FROM reviews LIMIT 15 OFFSET ${Number(id)};`;
   pool.query(queryString, (err, result) => {
     if (err) {
       console.log(err);
