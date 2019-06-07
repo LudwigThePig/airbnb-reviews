@@ -62,22 +62,33 @@ if len(sys.argv) < 2:
     sys.exit('You must supply the item_number argument')
 elif len(sys.argv) > 2:
     job_id = sys.argv[2]   
- 
+
+# the total number of documents that this process will insert
 documents_number = int(sys.argv[1].split('.')[0])
-batch_number = 5 * 1000
+
+# The size of teh batches
+batch_number = 5000
+
+# Accessory variables for log statements
 job_name = 'Job#' + job_id
 start = datetime.now()
  
 connection = pymongo.MongoClient('mongodb://localhost') 
 db = connection.airbnb_reviews
 collection = db.reviews2
- 
+
+# Build the batch array
 batch_documents = [i for i in range(batch_number)]
  
 for index in range(documents_number):
     try:
+        # Generate a sentence with a random choices from the above arrays
         random_review = random.choice(starter) + 'The host was ' + random.choice(hostAdjective) +  ' and the ' + random.choice(location) + ' was ' + random.choice(locationAdjective) + 'The ' + random.choice(['two', 'three', 'four', 'five']) + ' days I spent there were ' + random.choice(stayAdjective) + ' ' + random.choice(ending) + 'I' + random.choice(ending2)
+
+        # Set the appropriate _id without collision from parallel processes
         docId = (index + 1) + ((int(job_id)) * documents_number)
+        
+        # The actual document
         document = {
             '_id' : docId,
             'text' : random_review,
@@ -85,10 +96,17 @@ for index in range(documents_number):
             'guest': fake.name().split()[0],
             'photo': random.choice(photos)
         }
+        
+        # place document into it's specified index
         batch_documents[index % batch_number] = document
+
+        # Batching the inserts
         if (index + 1) % batch_number == 0:
-            collection.insert_many(batch_documents)     
+            collection.insert_many(batch_documents)   
+
         index += 1
+
+        # Status updates
         if index % 100000 == 0:
             print(job_name, ' inserted ', index, ' documents.')
     except:
