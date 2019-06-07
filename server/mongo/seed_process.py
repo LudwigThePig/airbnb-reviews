@@ -7,9 +7,15 @@ from faker import Faker
 from datetime import datetime
 fake = Faker()
 
-randomText = [
-  "Awesome", 'OMG! ', 'JUST. WOW. ', '', '', 'What a blast! ', 'My wife and I really enjoyed the location. ', '', 'Good news everyone! ', 'Very clean and beautiful decore! ', 'Great space. ', 'Unfuhgetable! ', 'It was meh. ', 'It was nice. ', 'From the moment I saw the place I knew it would be a trainwreck. ', 'WARNING: not as advertised. ', 'just as advertised.', 'just what the doctor ordered.', 'breath taking.', 'cute and cozy.', 'lovely.'
-]
+starter = ['OMG! ', 'JUST. WOW. ', '', '', 'What a blast! ', 'My wife and I really enjoyed the location. ', '', 'Good news everyone! ', 'Very clean and beautiful decore! ', 'Great space. ', 'Unfuhgetable! ', 'It was meh. ', 'It was nice. ', 'From the moment I saw the place I knew it would be a trainwreck. ', 'WARNING: not as advertised. ']
+hostAdjective = ['very helpful and pleasant', 'warm and friendly', 'kinda a jerk', 'charming', 'nice but couldn\'t stop talking about her cats', 'friendly']
+location = ['house', 'home', 'house', 'apartment', 'townhouse', 'house', 'apartment', 'villa', 'apartment']
+locationAdjective = ['just as advertised.', 'just what the doctor ordered.', 'breath taking.', 'cute and cozy.', 'lovely.']
+stayAdjective = ['interesting to say the least.', 'quite pleasent.', 'fun and relaxing.', 'well worth the price.']
+ending = ['In conclusion ', 'all in all ', '', '', '', '']
+ending2 = [' would say things went very well.', ' had a great time.', ' absolutely loved my time there.', ' we had a wonderful stay.', ' hated it.', ' would never go back.', 't was great.']
+
+
 photos = [
   'https://s3.amazonaws.com/airbnbcloneuserphotos/225x225_0bDm6kFC2Tc.jpeg',
   'https://s3.amazonaws.com/airbnbcloneuserphotos/225x225_3U2wGr-Inps.jpeg',
@@ -46,7 +52,9 @@ photos = [
   'https://s3.amazonaws.com/airbnbcloneuserphotos/225x225_yki80w96VZ0.jpeg'
 ]
 
- 
+min_date = datetime(2012, 1, 1)
+max_date = datetime(2013, 1, 1)
+delta = (max_date - min_date).total_seconds()
  
 job_id = '1'
  
@@ -56,34 +64,32 @@ elif len(sys.argv) > 2:
     job_id = sys.argv[2]   
  
 documents_number = int(sys.argv[1].split('.')[0])
-batch_number = 5 * 1000
- 
+batch_number = 5#5 * 1000
+print(documents_number)
 job_name = 'Job#' + job_id
 start = datetime.now()
  
-# obtain a mongo connection
-connection = pymongo.MongoClient("mongodb://localhost")#, safe=True)
- 
-# obtain a handle to the random database
+connection = pymongo.MongoClient("mongodb://localhost") 
 db = connection.airbnb_reviews
-collection = db.reviews
+collection = db.reviews2
  
 batch_documents = [i for i in range(batch_number)]
  
 for index in range(documents_number):
-    try:           
-        date = datetime.fromtimestamp(time.mktime(min_date.timetuple()) + int(round(random.random() * delta)))
-        value = random.random()
+    try:
+        random_review = random.choice(starter) + 'The host was ' + random.choice(hostAdjective) +  ' and the ' + random.choice(location) + ' was ' + random.choice(locationAdjective) + 'The ' + random.choice(['two', 'three', 'four', 'five']) + ' days I spent there were ' + random.choice(stayAdjective) + ' ' + random.choice(ending) + 'I' + random.choice(ending2)
+        docId = (index + 1) + ((int(job_id) + 1) * 1000)
         document = {
-            'text' : fake.sentence(ext_word_list=randomText, nb_words=3),   
+            '_id' : docId,
+            'text' : random_review,
             'date' : fake.date(pattern="%Y-%m-%d", end_datetime=None),
             'guest': fake.name().split()[0],
-            'photo': random.choice(photos) 
+            'photo': random.choice(photos)
         }
         batch_documents[index % batch_number] = document
         if (index + 1) % batch_number == 0:
-            collection.insert(batch_documents)     
-        index += 1;
+            collection.insert_many(batch_documents)     
+        index += 1
         if index % 100000 == 0:
             print(job_name, ' inserted ', index, ' documents.')
     except:
