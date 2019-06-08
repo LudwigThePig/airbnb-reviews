@@ -79,7 +79,6 @@ collection = db.reviews2
 
 # Build the batch array
 batch_documents = [i for i in range(batch_number)]
- 
 for index in range(documents_number):
     try:
         # Generate a sentence with a random choices from the above arrays
@@ -91,6 +90,7 @@ for index in range(documents_number):
         # The actual document
         document = {
             '_id' : docId,
+            'listing_id': random.randint(0, 1000000),
             'text' : random_review,
             'date' : fake.date(pattern='%Y-%m-%d', end_datetime=None),
             'guest': fake.name().split()[0],
