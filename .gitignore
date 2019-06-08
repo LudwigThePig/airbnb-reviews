@@ -6,3 +6,4 @@ node_modules/
 unSplashApiKey.js
 insert.sql
 .env
+newrelic_agent.log
