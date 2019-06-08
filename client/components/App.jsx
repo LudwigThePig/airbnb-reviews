@@ -51,7 +51,7 @@ class App extends React.Component {
 
   componentDidMount() {
     Axios({
-      url: `http://localhost:3004/api/listings/reviews/${Math.floor(Math.random() * 9999999 / 2) + 4999980}`,
+      url: `http://localhost:3004/api/listings/reviews/${Math.floor(Math.random() * 999999 / 2) + 499980}`,
       method: 'GET',
       headers: {
         'Accepts': 'application/json',
