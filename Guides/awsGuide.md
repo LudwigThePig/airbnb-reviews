@@ -67,4 +67,22 @@ Let's launch our first instance! To set up your database,
   - To exit the shell at anytime, type `exit` and hit enter.
 1. If that worked, try typing `mongo` into the shell. Did that work? Great! Now you know enough to be dangerous. To get started, type `db.myCollection.insert({foo: 'bar'})` 10,000,000 times... Hmm, there has got to be a better way of doing this.
 
-We will connect to this MongoDB the same way that we connect to any other database. We just need to expose a few things first...
+We will connect to this MongoDB the same way that we connect to any other database. We just need to build out our connection string. Again, we will be using MongoDB for this tutorial but the concepts will be the same. We will need to procure a _username_, _password_, _URL_, and a valid _port_.
+
+1. Lets start with our username and password. In the Mongo shell, enter the following.
+```
+use myDatabase
+db.createUser(
+  {
+    user: "morgan",
+    pwd: "batman123",
+    roles: [
+       { role: "readWrite", db: "myDatabase" }
+    ]
+  }
+)
+
+```
+1. Next, we need to grab our URL. That will be the public DNS that we used earlier to connect to SSH into the system. That was easy!
+1. Then, we need to allow users to connect to our databases port. The default port for Mongo is 27017 and 5432 for PostgreSQL.
+1. Lastly, we need to make sure that our port is exposed to the world wide web. We did this earlier when we created the security group. But, if you forgot to do that, *like me*, then you can simply edit the security group from the EC2 dashboard. Add a rule that allows access to your desired port and let everyone access it via TCP.
