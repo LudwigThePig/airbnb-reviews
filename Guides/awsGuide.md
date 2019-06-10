@@ -1,3 +1,5 @@
+For a better viewing experience, [view this tutorial on github](https://github.com/LudwigThePig/airbnb-reviews/blob/master/Guides/awsGuide.md)
+---
 # Morgan's Super Awesome EC2 Tutorial!
 
 In this card, you will learn how to deploy your database, service, and proxy to a raw EC2 instance. [Well isn't that neat!](https://www.youtube.com/watch?v=Hm3JodBR-vs)
@@ -42,16 +44,18 @@ Let's launch our first instance! To set up your database,
 
 1. Go to the EC2 portal and click *Launch Instance*.
 
-1. Pick an AMI from the marketplace for your desired database. For this tutorial, we will use MongoDB 3.4, but the instructions will be similar for most databases.
+2. Pick an AMI from the marketplace for your desired database. For this tutorial, we will use MongoDB 3.4, but the instructions will be similar for most databases.
   - If you are going to build your db instance from scratch, just leave now. You're expertise exceeds this tutorial
 
-1. Select a t2-micro instance type. Then, skip ahead to Security Groups
+3. Select a t2-micro instance type. Then, skip ahead to Security Groups
 
-1. Make sure you are creating a new security group that enables you to SSH via TCP on port 22 from 'My IP'
-  - The only setting you that you should have to change is Source. Change it from 'Custom' to 'My IP'
-![Security Group](https://i.imgur.com/bZE7xRa.jpg)
+4. Make sure you are creating a new security group that enables you to SSH via TCP on port 22 from 'My IP'
+  - There should already be a rule for SSH. The only thing that you will need to change is the source. Change it from 'Custom' to 'My IP'
+  - Add another rule to expose our database's port to outside traffic. The default port for Mongo is 27017 and 5432 for PostgreSQL. You can set the source to 'My IP' but you will need to add another rule later on to accomodate the IP addresses of your deployed service and proxy.
+  - When it's all done, it should look something like this,
+![Security Group](https://imgur.com/aoeXHcf.jpg)
 
-1. Create a new key pair, download, keep it secret, keep it safe. This will allow you to SSH into your instance.
+5. Create a new key pair, download, keep it secret, keep it safe. This will allow you to SSH into your instance.
 
 ![keept it secret](https://media.giphy.com/media/3oFyCYNrra8qo1Cv8Q/giphy.gif)
   -  On Windows, you will need to set explicit permissions for this file. If this file is too open, you cannot SSH with it. [How to set permissions Windows](https://superuser.com/questions/1296024/windows-ssh-permissions-for-private-key-are-too-open). Trev and Jordan, if you encounter this problem, just by a Windows machine, or make a bullet point on how to resolve this issue.
@@ -60,29 +64,36 @@ Let's launch our first instance! To set up your database,
 
 1. Open your terminal and navigate to the directory that holds your .pem file.
   - In Windows, be sure to run the terminal as an administrator
-1. Run `ssh -i ./<fileWithSSHKey>.pem ec2-user@<yourPublicDNS>.compute.amazonaws.com`. You can find your public DNS in your EC2 Dashboard.
+2. Run `ssh -i ./<fileWithSSHKey>.pem ec2-user@<yourPublicDNS>.compute.amazonaws.com`. You can find your public DNS in your EC2 Dashboard.
   - On OSX, you may need to run `sudo ssh <...>`
   - If all went well, you should see something like this,
 ![successful SSH](https://imgur.com/kRA06W6.jpg)
   - To exit the shell at anytime, type `exit` and hit enter.
-1. If that worked, try typing `mongo` into the shell. Did that work? Great! Now you know enough to be dangerous. To get started, type `db.myCollection.insert({foo: 'bar'})` 10,000,000 times... Hmm, there has got to be a better way of doing this.
+3. If that worked, try typing `mongo` into the shell. Did that work? Great! Now you know enough to be dangerous. To get started, type `db.myCollection.insert({foo: 'bar'})` 10,000,000 times... Hmm, there has got to be a better way of doing this.
 
 We will connect to this MongoDB the same way that we connect to any other database. We just need to build out our connection string. Again, we will be using MongoDB for this tutorial but the concepts will be the same. We will need to procure a _username_, _password_, _URL_, and a valid _port_.
 
 1. Lets start with our username and password. In the Mongo shell, enter the following.
-```
-use myDatabase
-db.createUser(
-  {
-    user: "morgan",
-    pwd: "batman123",
-    roles: [
-       { role: "readWrite", db: "myDatabase" }
-    ]
-  }
-)
+  ```
+  use myDatabase
+  db.createUser(
+    {
+      user: "morgan",
+      pwd: "batman123",
+      roles: [
+        { role: "readWrite", db: "myDatabase" }
+      ]
+    }
+  )
+  ```
+2. Next, we need to grab our URL. That will be the public DNS that we used earlier to connect to SSH into the system. That was easy!
+3. Lastly, we need to make sure that our port is exposed to the world wide web. We did this earlier when we created the security group. But, if you forgot to do that, *like me*, then you can simply edit the security group from the EC2 dashboard. Add a rule that allows access to your desired port and let everyone access it via TCP.
+4. Now lets piece it all together! You have probably seen connection string before but I'll leave it here for your convenience.
+  - `mongodb://<USERNAME>:<PASSWORD>@<PUBLIC_DNS>/<DATABASE_NAME>`
 
-```
-1. Next, we need to grab our URL. That will be the public DNS that we used earlier to connect to SSH into the system. That was easy!
-1. Then, we need to allow users to connect to our databases port. The default port for Mongo is 27017 and 5432 for PostgreSQL.
-1. Lastly, we need to make sure that our port is exposed to the world wide web. We did this earlier when we created the security group. But, if you forgot to do that, *like me*, then you can simply edit the security group from the EC2 dashboard. Add a rule that allows access to your desired port and let everyone access it via TCP.
+Exit the shell and do whatever you want with your new connection string.
+
+---
+
+# Services
+I really do not want to think about this right now.
