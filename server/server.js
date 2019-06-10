@@ -13,10 +13,10 @@ if (process.env.DB === 'MONGO') {
     global.db = db;
     app.listen(port, () => {
       console.log(`Listening on localhost:${port} with Mongo in ${process.env.NODE_ENV} mode`);
-    })
+    });
   })
 } else {
   app.listen(port, () => {
     console.log(`Listening on localhost:${port} with Mongo in ${process.env.NODE_ENV} mode`);
-  })
+  });
 }
