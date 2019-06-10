@@ -1,6 +1,6 @@
 # Morgan's Super Awesome EC2 Tutorial!
 
-In this card, you will learn how to deploy your database, service, and proxy to a raw EC2 instance. [Well isn't that neat!](https://www.youtube.com/watch?v=Hm3JodBR-vs).
+In this card, you will learn how to deploy your database, service, and proxy to a raw EC2 instance. [Well isn't that neat!](https://www.youtube.com/watch?v=Hm3JodBR-vs)
 ---
 # Sections
 1. [Considerations and Groundwork](#Groundwork)
@@ -64,3 +64,7 @@ Let's launch our first instance! To set up your database,
   - On OSX, you may need to run `sudo ssh <...>`
   - If all went well, you should see something like this,
 ![successful SSH](https://imgur.com/kRA06W6.jpg)
+  - To exit the shell at anytime, type `exit` and hit enter.
+1. If that worked, try typing `mongo` into the shell. Did that work? Great! Now you know enough to be dangerous. To get started, type `db.myCollection.insert({foo: 'bar'})` 10,000,000 times... Hmm, there has got to be a better way of doing this.
+
+We will connect to this MongoDB the same way that we connect to any other database. We just need to expose a few things first...
