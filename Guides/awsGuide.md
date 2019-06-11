@@ -54,6 +54,7 @@ Let's launch our first instance! To set up your database,
   - Add another rule to expose our database's port to outside traffic. The default port for Mongo is 27017 and 5432 for PostgreSQL. You can set the source to 'My IP' but you will need to add another rule later on to accomodate the IP addresses of your deployed service and proxy.
   - When it's all done, it should look something like this,
 ![Security Group](https://imgur.com/aoeXHcf.jpg)
+**Note: the port in this screenshot is wrong. the default port for mongo is 27017, NOT 27071!**
 
 5. Create a new key pair, download, keep it secret, keep it safe. This will allow you to SSH into your instance.
 

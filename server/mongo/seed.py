@@ -9,7 +9,7 @@ from datetime import datetime
 cpu_count = multiprocessing.cpu_count()
  
 # Connect to the database
-client = pymongo.MongoClient('mongodb://localhost') 
+client = pymongo.MongoClient('mongodb://Morgan:rei@ec2-54-244-61-237.us-west-2.compute.amazonaws.com/airbnb_reviews') 
 collection = client.airbnb_reviews.reviews2
  
 # Limits and insert counts

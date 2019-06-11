@@ -62,6 +62,7 @@
     "dbinit": "psql -d postgres -U postgres -f ./server/db/schema.sql",
     "seed": "node ./server/db/seed.js",
     "seed2": "psql -d postgres -U postgres -f insert2.sql",
+    "seedMongo": "server/mongo/seed.py",
     "knex": "knex migrate:rollback; knex migrate:latest; knex seed:run",
     "build": "webpack"
   },
