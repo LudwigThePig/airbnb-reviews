@@ -1,5 +1,3 @@
-For a better viewing experience, [view this tutorial on github](https://github.com/LudwigThePig/airbnb-reviews/blob/master/Guides/awsGuide.md)
----
 # Morgan's Super Awesome EC2 Tutorial!
 
 In this card, you will learn how to deploy your database, service, and proxy to a raw EC2 instance. [Well isn't that neat!](https://www.youtube.com/watch?v=Hm3JodBR-vs)
@@ -40,6 +38,7 @@ If you answered no to any of these, you will be coughing up some dough to the AW
 ---
 # Databases
 
+## Launching a database
 Let's launch our first instance! To set up your database,
 
 1. Go to the EC2 portal and click *Launch Instance*.
@@ -53,15 +52,19 @@ Let's launch our first instance! To set up your database,
   - There should already be a rule for SSH. The only thing that you will need to change is the source. Change it from 'Custom' to 'My IP'
   - Add another rule to expose our database's port to outside traffic. The default port for Mongo is 27017 and 5432 for PostgreSQL. You can set the source to 'My IP' but you will need to add another rule later on to accomodate the IP addresses of your deployed service and proxy.
   - When it's all done, it should look something like this,
+**Note: the port in this screenshot is incorrect. the default port for mongo is 27017, NOT 27071!**
 ![Security Group](https://imgur.com/aoeXHcf.jpg)
-**Note: the port in this screenshot is wrong. the default port for mongo is 27017, NOT 27071!**
 
 5. Create a new key pair, download, keep it secret, keep it safe. This will allow you to SSH into your instance.
 
 ![keept it secret](https://media.giphy.com/media/3oFyCYNrra8qo1Cv8Q/giphy.gif)
   -  On Windows, you will need to set explicit permissions for this file. If this file is too open, you cannot SSH with it. [How to set permissions Windows](https://superuser.com/questions/1296024/windows-ssh-permissions-for-private-key-are-too-open). Trev and Jordan, if you encounter this problem, just by a Windows machine, or make a bullet point on how to resolve this issue.
 
-**Congrats**, you have just created your first EC2 instance! Now it's time to SSH into your Virtual Machine.
+Congrats, you have just created your first EC2 instance! Now it's time to SSH into your Virtual Machine.
+
+## SSH (Secure Shell)
+
+SSHing is the practice of opening a secure TCP connection with the shell on a server. The default port for a SSH is 22.
 
 1. Open your terminal and navigate to the directory that holds your .pem file.
   - In Windows, be sure to run the terminal as an administrator
@@ -72,7 +75,10 @@ Let's launch our first instance! To set up your database,
   - To exit the shell at anytime, type `exit` and hit enter.
 3. If that worked, try typing `mongo` into the shell. Did that work? Great! Now you know enough to be dangerous. To get started, type `db.myCollection.insert({foo: 'bar'})` 10,000,000 times... Hmm, there has got to be a better way of doing this.
 
-We will connect to this MongoDB the same way that we connect to any other database. We just need to build out our connection string. Again, we will be using MongoDB for this tutorial but the concepts will be the same. We will need to procure a _username_, _password_, _URL_, and a valid _port_.
+
+## Creating our connection string
+
+SSHing is great for setting up our server and database but we cannot SSH into our server everytime we want to query our database. Instead, we will want to set up a connection string and connect to the port. We already exposed our port. All we need to do is procure a _username_, _password_, _URL_, and that _port_.
 
 1. Lets start with our username and password. In the Mongo shell, enter the following.
   ```
@@ -95,7 +101,7 @@ We will connect to this MongoDB the same way that we connect to any other databa
 Exit the shell and do whatever you want with your new connection string.
 
 
-### Indexing Your EC2 instance
+## Indexing Your EC2 instance
 If you are going to index your database, you should research how the database engine is going to handle a memory shortage. By default, MongoDB does not do anything. 
 
 Mongo allows you to run the index operation the background, which will only use a portion of your machine's total working memory. You can also reduce the space complexity of the index operation by using the parse option. Parse will skip over any documents that do no contain the indexed field. 
