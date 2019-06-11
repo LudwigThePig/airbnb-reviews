@@ -1,6 +1,6 @@
-# Morgan's Super Awesome EC2 Tutorial!
+# Morgan's Super Awesome EC2 Guide!
 
-In this card, you will learn how to deploy your database, service, and proxy to a raw EC2 instance. [Well isn't that neat!](https://www.youtube.com/watch?v=Hm3JodBR-vs)
+In this guide, you will learn how to deploy your database, service, and proxy to a raw EC2 instance. [Well isn't that neat!](https://www.youtube.com/watch?v=Hm3JodBR-vs)
 ---
 # Sections
 1. [Considerations and Groundwork](#Groundwork)
@@ -35,6 +35,8 @@ If you answered no to any of these, you will be coughing up some dough to the AW
 **What Instance Type** Instance types vary by memory size and CPU cores. Project specifications require that we use a t2-micro, which comes with a 1gb of RAM, one CPU core, and a couple hundred mB/s of data transfer. That should be plenty for one instance
   - *What about storage size?*, actual HDD or SSD space will be defined by EBS, which stands for Elastic Block Store, not Beanstalk. Confusing, right? We'll get there
 
+**What is a load balancer?** A load balancer can do a couple of things but its primary function is distrubuting requests in a sensible way across a cluster of servers. Think of it as the TSA agent at airport security who tells you which line to enter. The agent will direct traffic evenly across all open lines. If it is slow, there may only be two or three lines open, and if it's Christmas Eve at LaGuardia, all the lines will be open.
+
 ---
 # Databases
 
@@ -55,7 +57,9 @@ Let's launch our first instance! To set up your database,
 **Note: the port in this screenshot is incorrect. the default port for mongo is 27017, NOT 27071!**
 ![Security Group](https://imgur.com/aoeXHcf.jpg)
 
-5. Create a new key pair, download, keep it secret, keep it safe. This will allow you to SSH into your instance.
+5. Click 'Review and Launch', then 'Launch'!
+
+6. You will be prompted to pick a key/value pair. Create a new key pair, download, keep it secret, keep it safe. This will allow you to SSH into your instance.
 
 ![keept it secret](https://media.giphy.com/media/3oFyCYNrra8qo1Cv8Q/giphy.gif)
   -  On Windows, you will need to set explicit permissions for this file. If this file is too open, you cannot SSH with it. [How to set permissions Windows](https://superuser.com/questions/1296024/windows-ssh-permissions-for-private-key-are-too-open). Trev and Jordan, if you encounter this problem, just by a Windows machine, or make a bullet point on how to resolve this issue.
@@ -110,5 +114,26 @@ Eg: `db.myCollection.createIndex({indexable_field: 1}, {background: true}, {spar
 
 ---
 
-# Services
-I really do not want to think about this right now.
+# Services 
+
+For the sake of time and space complexity, we are going to assume that you have read The prior sections. At present, this guide does not take load balancers into account. Upon introducing a load balancer, some aspects of this setup may become incongruent or obsolete. As such, this section is marked as 🚨**experimental**🚨
+
+Nevertheless, this is a guide will get your feet wet and hopefully we will touch upon some load balancer stuff.
+
+## Creating and configuring your EC2 instance 
+
+with Amazon Linux AMI, should be top result.
+
+## SSH into your instance, download Node, and pull in your repo
+
+SSH in, download NVM, download the version of node assocated with your repo.
+
+Download git. Git clone your repo
+
+## Starting your server and keeping it running
+
+
+
+## Configuring Your Load Balancer
+
+For this tutorial, we will be using Nginx
