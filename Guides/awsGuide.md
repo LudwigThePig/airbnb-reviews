@@ -94,6 +94,14 @@ We will connect to this MongoDB the same way that we connect to any other databa
 
 Exit the shell and do whatever you want with your new connection string.
 
+
+### Indexing Your EC2 instance
+If you are going to index your database, you should research how the database engine is going to handle a memory shortage. By default, MongoDB does not do anything. 
+
+Mongo allows you to run the index operation the background, which will only use a portion of your machine's total working memory. You can also reduce the space complexity of the index operation by using the parse option. Parse will skip over any documents that do no contain the indexed field. 
+
+Eg: `db.myCollection.createIndex({indexable_field: 1}, {background: true}, {sparse: true}) `
+
 ---
 
 # Services

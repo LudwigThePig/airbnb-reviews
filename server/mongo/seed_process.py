@@ -73,7 +73,7 @@ batch_number = 5000
 job_name = 'Job#' + job_id
 start = datetime.now()
  
-connection = pymongo.MongoClient('mongodb://Morgan:rei@ec2-54-244-61-237.us-west-2.compute.amazonaws.com/airbnb_reviews') 
+connection = pymongo.MongoClient('mongodb://localhost:27017') 
 db = connection.airbnb_reviews
 collection = db.reviews2
 
