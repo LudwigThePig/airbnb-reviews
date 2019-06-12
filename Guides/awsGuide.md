@@ -216,7 +216,13 @@ ansible-galaxy install nginxinc.nginx
 ```
 4. Run your playbook.yml through ansible-playbook by running `ansible-playbook playbook.yml`. After Ansible runs through your playbook, you should see something like this,
 ![Ansible Playbook](https://imgur.com/B37Gfjh.jpg)
+5. That's all we need to do in the shell for the moment. Let's divert our attention to our security group. In the left sidebar of the EC2 dashboard, scroll down to Network & Security and select security groups. Locate the security group that you want to redirect traffic to and copy its 'Group Id'. Then, select the security group associated with your proxy and add a customt TCP outbound rule with the service's 'Group Id' as the destination. It should look like so, 
+![Outbound Rules](https://imgur.com/ZTElK55.jpg)
 
+Now navigate to your load balancer's public DNS in your browser. Do you see this splash page?
+[Nginx Splash Page](https://imgur.com/ZLOCb9F.jpg)
+
+Yes? Nice work! You just sucefully installed Nginx. We are only a couple steps away from having it work its magic. 
 
 
 
