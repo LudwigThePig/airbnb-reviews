@@ -151,9 +151,10 @@ Congrats, you installed Node on a box in the cloud! Your results will look like 
 3. Let's install git! Run `sudo yum install git`. No sweat, right?!
 4. Take note of your `pwd` and `git clone https://github.com/<yourUsername>/<yourKickAssRepo>.git` your service from github.
 
-SSH in, download NVM, download the version of node assocated with your repo.
+Now that you are all set up, remember to `npm install`, create your env file, and do whatever set up you need. To see your results, navigate to <yourPublicDNS>:<yourPortNumber>. If you have whacked all the moles, you should see your service! Exciting, right?!
 
-Download git. Git clone your repo
+![Service Running](https://imgur.com/M8oaOjE.jpg)
+
 
 ## Starting your server and keeping it running
 
