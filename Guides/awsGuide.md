@@ -122,9 +122,34 @@ Nevertheless, this is a guide will get your feet wet and hopefully we will touch
 
 ## Creating and configuring your EC2 instance 
 
-with Amazon Linux AMI, should be top result.
+Let's just jump right into things.
 
-## SSH into your instance, download Node, and pull in your repo
+1. Lets launch an instance just like before. For our AMI, lets go with just a vanilla AMI. The Amazon Linux 2 AMI has a lot of good support, articles, and stack overflow posts. Let's select that.
+2. Instance type will be a t2.micro again.
+3. Jump ahead to security group. Like before, you will want to add 'MyIP' as a source. Then add two rules. One for port 80, where we will receive requests to server, and one port for your service, the port that your server is listening to (eg. 3001). Set the source to anywhere for both ports.
+4. Review, launch the instance, create a key/value pair and store it somewhere safe.
+
+That was pretty straightforward. Now lets get installing!
+
+
+## SSH and Shop for Packages!
+
+Now that we have our instance set up, we can SSH into our instance and start downloading some stuff! On our shopping list today is _node-version-manager_, _node_, _git_, and _Nginx_.
+
+1. SSH into your instance like before.
+  - For your convenience, `ssh -i ./<fileWithSSHKey>.pem ec2-user@<yourPublicDNS>.compute.amazonaws.com`
+  - [and the post for setting permissions](https://superuser.com/questions/1296024/windows-ssh-permissions-for-private-key-are-too-open) 
+2. Once you are in there, let's get node going!
+  - First, install NVM (Node Version Manager), `curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash `.
+  - Restart your shell to make use of NVM.
+  - Then, run `nvm install node <yourPreferredVersionOfNode>`. If you want to install the latest version of node, omit the version from the command. It is unlikely that a newer version of Node will break your code, but it is good practice to deploy with the version of node that you developed with. To see what version of Node you are using, run `node --version` on your own computer.
+
+Congrats, you installed Node on a box in the cloud! Your results will look like this,
+
+![successfully deployed node](https://i.imgur.com/7VxL59F.jpg)
+
+3. Let's install git! Run `sudo yum install git`. No sweat, right?!
+4. Take note of your `pwd` and `git clone https://github.com/<yourUsername>/<yourKickAssRepo>.git` your service from github.
 
 SSH in, download NVM, download the version of node assocated with your repo.
 
@@ -137,3 +162,5 @@ Download git. Git clone your repo
 ## Configuring Your Load Balancer
 
 For this tutorial, we will be using Nginx
+
+[Super awesome resource that helped me write Service guide](https://medium.com/@nishankjaintdk/setting-up-a-node-js-app-on-a-linux-ami-on-an-aws-ec2-instance-with-nginx-59cbc1bcc68c)
