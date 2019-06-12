@@ -174,10 +174,16 @@ I guess we tackled the *what* and *how* questions with that absurd analogy. So, 
 3. Now, exit your SSH and open up your service in your web browser. Did everything load? Great! Before you move forward, you should pay a visit to the PM2 docs and dig into the `pm2` commands. [Here is a good starting point](http://pm2.keymetrics.io/docs/usage/process-management/). Here is a little cheat-sheet for your convenience:
 
 | Command  | Description  |
-|---|---|
-|`pm2 start <appName>.js --name MyApp` | Starts the app and designates it the name 'MyApp' |
-|`pm2 stop <appName>.js` | Stop's the app from running |
-|`pm2 delete <appName>.js` | Deletes the app |
+|---|------|
+| `pm2 start <appName>.js --name MyApp` | Starts the process and designates it the name 'MyApp' |
+| `pm2 stop <appName>.js` | Stops the process |
+| `pm2 delete <appName>.js` | Deletes the process. Can be performed while the process is running |
+| `pm2 restart <appName>.js` | Restarts the app |
+| `pm2 list` or `pm2 ls`| List all of the running processes |
+| `pm2 show 0` | Shows more detailed information about process |
+| `pm2 start memoryHungryServer.js --max-memory-restart 20M` | restarts the process with maximum memory allotment |
+
+
 
 ## Configuring Your Load Balancer
 
