@@ -191,18 +191,20 @@ You now have all the tools that you need to set up a node server. These same pri
 
 For this tutorial, we will be using Nginx to handle load balancing. Like the last section, we are going to assume that you have read the prior sections or, at the very least, have an basic understanding of the things being discussed. With each section, we will be moving through the content a lot faster. Let's jump right on in!
 
-1. Create another t2.micro instance with a Amazon Linux AMI and expose port 80. 
+1. Create another t2.micro instance with an Ubuntu AMI and expose port 80.
+  - You cannot run Nginx with Amazon Linux distro. Nginx recommends Ubuntu.
+  - For ubuntu, your SSH command will be slightly different. Instead of `... ec-user@<publicDNS>`, your username will be 'ubuntu. So, you would write `... ubunutu@<publicDNS>`.
 2. SSH into your instance, install pip, ansible, and use ansible to instal Nginx. For your convenience,
 
 ```
-apt update
-apt install python-pip -y
-pip install ansible
+sudo apt update
+sudo apt install python-pip -y
+sudo pip install ansible
 ansible-galaxy install nginxinc.nginx
 ```
   - Let's break down some of these packages.
     - Pip is the package manager for Python. 
-    - Ansible is an open-source CD (continuous deployment) platform that plays nicely with Nginx. 
+    - Ansible is an open-source CD (continuous deployment) platform that plays nicely with Nginx. Don't worry too much about this right now.
   - Told you we are going to be moving faster :)
 3. Create a playbook.yml. In the YML, enter the following,
 ```
@@ -212,7 +214,9 @@ ansible-galaxy install nginxinc.nginx
   roles:
     - role: nginxinc.nginx
 ```
-4. Run your playbook.yml through ansible-galaxy by running `ansible-playbook playbook.yml`.
+4. Run your playbook.yml through ansible-playbook by running `ansible-playbook playbook.yml`. After Ansible runs through your playbook, you should see something like this,
+![Ansible Playbook](https://imgur.com/B37Gfjh.jpg)
+
 
 
 
