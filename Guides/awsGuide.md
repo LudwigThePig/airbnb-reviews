@@ -6,7 +6,9 @@ In this guide, you will learn how to deploy your database, service, and proxy to
 1. [Considerations and Groundwork](#Groundwork)
 1. [Setting your database](#Databases)
 1. [Deploying your service](#Services)
+1. [Using a load balancer](#Load-Balancer)
 1. [Deploying your proxy](#Proxies)
+1. [Resources](#Resources)
 
 ---
 # Groundwork
@@ -116,9 +118,7 @@ Eg: `db.myCollection.createIndex({indexable_field: 1}, {background: true}, {spar
 
 # Services 
 
-For the sake of time and space complexity, we are going to assume that you have read The prior sections. At present, this guide does not take load balancers into account. Upon introducing a load balancer, some aspects of this setup may become incongruent or obsolete. As such, this section is marked as 🚨**experimental**🚨
-
-Nevertheless, this is a guide will get your feet wet and hopefully we will touch upon some load balancer stuff.
+For the sake of time and space complexity, we are going to assume that you have read the prior sections. In this section we will talk about how to deploy one instance of a service. We will refer to this guide as an abstraction later on when we talk about our load balancer.
 
 ## Creating and configuring your EC2 instance 
 
@@ -184,9 +184,41 @@ I guess we tackled the *what* and *how* questions with that absurd analogy. So, 
 | `pm2 start memoryHungryServer.js --max-memory-restart 20M` | restarts the process with maximum memory allotment |
 
 
+You now have all the tools that you need to set up a node server. These same principles will apply to the proxy but, before we can talk about proxies, we need to tackle load balancers first!
 
-## Configuring Your Load Balancer
 
-For this tutorial, we will be using Nginx
+# Load Balancer
+
+For this tutorial, we will be using Nginx to handle load balancing. Like the last section, we are going to assume that you have read the prior sections or, at the very least, have an basic understanding of the things being discussed. With each section, we will be moving through the content a lot faster. Let's jump right on in!
+
+1. Create another t2.micro instance with a Amazon Linux AMI and expose port 80. 
+2. SSH into your instance, install pip, ansible, and use ansible to instal Nginx. For your convenience,
+
+```
+apt update
+apt install python-pip -y
+pip install ansible
+ansible-galaxy install nginxinc.nginx
+```
+  - Let's break down some of these packages.
+    - Pip is the package manager for Python. 
+    - Ansible is an open-source CD (continuous deployment) platform that plays nicely with Nginx. 
+  - Told you we are going to be moving faster :)
+3. Create a playbook.yml. In the YML, enter the following,
+```
+---
+- hosts: localhost
+  become: true
+  roles:
+    - role: nginxinc.nginx
+```
+4. Run your playbook.yml through ansible-galaxy by running `ansible-playbook playbook.yml`.
+
+
+
+# Resources
+
 
 [Super awesome resource that helped me write Service guide](https://medium.com/@nishankjaintdk/setting-up-a-node-js-app-on-a-linux-ami-on-an-aws-ec2-instance-with-nginx-59cbc1bcc68c)
+
+[The amazing Nginx docs that should be the gold model of documentation](https://docs.nginx.com/nginx/deployment-guides/amazon-web-services/ec2-instances-for-nginx/)
