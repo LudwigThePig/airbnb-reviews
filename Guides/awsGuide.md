@@ -158,7 +158,26 @@ Now that you are all set up, remember to `npm install`, create your env file, an
 
 ## Starting your server and keeping it running
 
+Now, close your terminal and try to access your service again. You will be greeted with a nice little error message. Take a second to ponder why this is, what this means for our server, and how we should think about running our server on EC2 instance. 
 
+Let's tackle the *why* first. Our server is having seperation anxiety. Without us, it is a useless, nervous, wreck. We can go about this in a couple of ways. The first would be to start it up in the background as a service. This is great because it can go about its day without any oversight. We just need to hit start and walkaway.
+
+As good as this seems, it has one major issue. What if our server trips on a rock and scrapes its knee or loses its wallet during a heavy night of drinking? Our server does not have any life experience or any way to learn from life experiences. So, we need a process manager.
+
+A process manager will restart our server after a crash, perform git pull requests when there is a newer version of our service, run scripts before starting the server, and so much more! The process manager will be like a nanny for our server. Our server may still get some seperation-anxiety from time to time and need some new lessons from time to time but our nanny, the process manager, will be good enough 99% of the time.
+
+I guess we tackled the *what* and *how* questions with that absurd analogy. So, let's dive into the process manager. For this guide, we will be using [PM2](https://pm2.io/doc/en/runtime/overview/?utm_source=pm2&utm_medium=website&utm_campaign=rebranding). There are plenty of good alternatives, such as [Strong Loop](https://strong-pm.io/) and [Forever](https://github.com/foreversd/forever). Do your own research and find the process manager this fits your needs.
+
+1. To get started with PM2, SSH back into your instance and run `npm install pm2 -g`
+2. Then navigate to the root level of your directory and run `pm2 start <thePathAndNameOfYourServerFile>`. If all goes well, you will see something like this,
+![PM2 started](https://imgur.com/lIouGkL.jpg).
+3. Now, exit your SSH and open up your service in your web browser. Did everything load? Great! Before you move forward, you should pay a visit to the PM2 docs and dig into the `pm2` commands. [Here is a good starting point](http://pm2.keymetrics.io/docs/usage/process-management/). Here is a little cheat-sheet for your convenience:
+
+| Command  | Description  |
+|---|---|
+|`pm2 start <appName>.js --name MyApp` | Starts the app and designates it the name 'MyApp' |
+|`pm2 stop <appName>.js` | Stop's the app from running |
+|`pm2 delete <appName>.js` | Deletes the app |
 
 ## Configuring Your Load Balancer
 
