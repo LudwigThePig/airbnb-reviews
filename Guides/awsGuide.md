@@ -34,10 +34,10 @@ While learning how to build your own image from the ground up may be a great lea
  - Available in your region?
 If you answered no to any of these, you will be coughing up some dough to the AWS shortly.
 
-**What Instance Type** Instance types vary by memory size and CPU cores. Project specifications require that we use a t2-micro, which comes with a 1gb of RAM, one CPU core, and a couple hundred mB/s of data transfer. That should be plenty for one instance
+**What Instance Type** Instance types vary by memory size and CPU cores. Project specifications require that we use a t2-micro, which comes with 1gb of RAM, one CPU core, and a couple hundred mB/s of data transfer. That should be plenty for one instance
   - *What about storage size?*, actual HDD or SSD space will be defined by EBS, which stands for Elastic Block Store, not Beanstalk. Confusing, right? We'll get there
 
-**What is a load balancer?** A load balancer can do a couple of things but its primary function is distrubuting requests in a sensible way across a cluster of servers. Think of it as the TSA agent at airport security who tells you which line to enter. The agent will direct traffic in such a way that want line does not get over whelmed with traffic.
+**What is a load balancer?** A load balancer can do a couple of things but its primary function is distributing requests in a sensible way across a cluster of servers. Think of it as the TSA agent at airport security who tells you which line to enter. The agent will direct traffic in such a way that want line does not get overwhelmed with traffic.
 
 There are two types of load balancers, *active-passive* and *active-active*. Active-passive involve a chain of servers whereby one server take all of the traffic until they are at capacity. When they reach capacity, they forward traffic on to the next server in the chain. Active-passive load balancers are sometimes referred to cascading load balancers or failover servers. Active-active load balancers evenly spread the traffic across a cluster of servers. Most of the time, it will use a round robin scheduling algorithm. 
 
@@ -60,7 +60,7 @@ Let's launch our first instance! To set up your database,
 
 4. Make sure you are creating a new security group that enables you to SSH via TCP on port 22 from 'My IP'
   - There should already be a rule for SSH. The only thing that you will need to change is the source. Change it from 'Custom' to 'My IP'
-  - Add another rule to expose our database's port to outside traffic. The default port for Mongo is 27017 and 5432 for PostgreSQL. You can set the source to 'My IP' but you will need to add another rule later on to accomodate the IP addresses of your deployed service and proxy.
+  - Add another rule to expose our database's port to outside traffic. The default port for Mongo is 27017 and 5432 for PostgreSQL. You can set the source to 'My IP' but you will need to add another rule later on to accommodate  the IP addresses of your deployed service and proxy.
   - When it's all done, it should look something like this,
 **Note: the port in this screenshot is incorrect. the default port for mongo is 27017, NOT 27071!**
 
@@ -70,7 +70,7 @@ Let's launch our first instance! To set up your database,
 
 6. You will be prompted to pick a key/value pair. Create a new key pair, download, keep it secret, keep it safe. This will allow you to SSH into your instance.
 
-![keept it secret](https://media.giphy.com/media/3oFyCYNrra8qo1Cv8Q/giphy.gif)
+![keep it secret](https://media.giphy.com/media/3oFyCYNrra8qo1Cv8Q/giphy.gif)
 
   -  On Windows, you will need to set explicit permissions for this file. If this file is too open, you cannot SSH with it. [How to set permissions Windows](https://superuser.com/questions/1296024/windows-ssh-permissions-for-private-key-are-too-open). Trev and Jordan, if you encounter this problem, just by a Windows machine, or make a bullet point on how to resolve this issue.
 
@@ -96,7 +96,7 @@ SSHing is the practice of opening a secure TCP connection with the shell on a se
 
 SSHing is great for setting up our server and database but we cannot SSH into our server everytime we want to query our database. Instead, we will want to set up a connection string and connect to the port. We already exposed our port. All we need to do is procure a _username_, _password_, _URL_, and that _port_.
 
-1. Lets start with our username and password. In the Mongo shell, enter the following.
+1. Let's start with our username and password. In the Mongo shell, enter the following.
   ```
   use myDatabase
   db.createUser(
@@ -120,7 +120,7 @@ Exit the shell and do whatever you want with your new connection string.
 ## Indexing Your EC2 instance
 If you are going to index your database, you should research how the database engine is going to handle a memory shortage. By default, MongoDB does not do anything. 
 
-Mongo allows you to run the index operation the background, which will only use a portion of your machine's total working memory. You can also reduce the space complexity of the index operation by using the parse option. Parse will skip over any documents that do no contain the indexed field. 
+Mongo allows you to run the index operation the background, which will only use a portion of your machine's total working memory. You can also reduce the space complexity of the index operation by using the parse option. Parse will skip over any documents that do not contain the indexed field. 
 
 Eg: `db.myCollection.createIndex({indexable_field: 1}, {background: true}, {sparse: true}) `
 
@@ -134,12 +134,12 @@ For the sake of time and space complexity, we are going to assume that you have 
 
 Let's just jump right into things.
 
-1. Lets launch an instance just like before. For our AMI, lets go with just a vanilla AMI. The Amazon Linux 2 AMI has a lot of good support, articles, and stack overflow posts. Let's select that.
+1. Lets launch an instance just like before. For our AMI, let's go with just a vanilla AMI. The Amazon Linux 2 AMI has a lot of good support, articles, and stack overflow posts. Let's select that.
 2. Instance type will be a t2.micro again.
 3. Jump ahead to security group. Like before, you will want to add 'MyIP' as a source. Then add two rules. One for port 80, where we will receive requests to server, and one port for your service, the port that your server is listening to (eg. 3001). Set the source to anywhere for both ports.
 4. Review, launch the instance, create a key/value pair and store it somewhere safe.
 
-That was pretty straightforward. Now lets get installing!
+That was pretty straightforward. Now let's get installing!
 
 
 ## SSH and Shop for Packages!
@@ -170,13 +170,13 @@ Now that you are all set up, remember to `npm install`, create your env file, an
 
 Now, close your terminal and try to access your service again. You will be greeted with a nice little error message. Take a second to ponder why this is, what this means for our server, and how we should think about running our server on EC2 instance. 
 
-Let's tackle the *why* first. Our server is having seperation anxiety. Without us, it is a useless, nervous, wreck. We can go about this in a couple of ways. The first would be to start it up in the background as a service. This is great because it can go about its day without any oversight. We just need to hit start and walkaway.
+Let's tackle the *why* first. Our server is having separation-anxiety. Without us, it is a useless, nervous wreck. We can go about this in a couple of ways. The first would be to start it up in the background as a service. This is great because it can go about its day without any oversight. We just need to hit start and walk away.
 
 As good as this seems, it has one major issue. What if our server trips on a rock and scrapes its knee or loses its wallet during a heavy night of drinking? Our server does not have any life experience or any way to learn from life experiences. So, we need a process manager.
 
-A process manager will restart our server after a crash, perform git pull requests when there is a newer version of our service, run scripts before starting the server, and so much more! The process manager will be like a nanny for our server. Our server may still get some seperation-anxiety from time to time and need some new lessons from time to time but our nanny, the process manager, will be good enough 99% of the time.
+A process manager will restart our server after a crash, perform git pull requests when there is a newer version of our service, run scripts before starting the server, and so much more! The process manager will be like a nanny for our server. Our server may still get some separation-anxiety  from time to time and need some new lessons from time to time but our nanny, the process manager, will be good enough 99% of the time.
 
-I guess we tackled the *what* and *how* questions with that absurd analogy. So, let's dive into the process manager. For this guide, we will be using [PM2](https://pm2.io/doc/en/runtime/overview/?utm_source=pm2&utm_medium=website&utm_campaign=rebranding). There are plenty of good alternatives, such as [Strong Loop](https://strong-pm.io/) and [Forever](https://github.com/foreversd/forever). Do your own research and find the process manager this fits your needs.
+I guess we tackled the *what* and *how* questions with that absurd analogy. So, let's dive into the process manager. For this guide, we will be using [PM2](https://pm2.io/doc/en/runtime/overview/?utm_source=pm2&utm_medium=website&utm_campaign=rebranding). There are plenty of good alternatives, such as [Strong Loop](https://strong-pm.io/) and [Forever](https://github.com/foreversd/forever). Do your own research and find the process manager that fits your needs.
 
 1. To get started with PM2, SSH back into your instance and run `npm install pm2 -g`
 2. Then navigate to the root level of your directory and run `pm2 start <thePathAndNameOfYourServerFile>`. If all goes well, you will see something like this,
@@ -201,7 +201,7 @@ You now have all the tools that you need to set up a node server. These same pri
 
 # Load Balancer
 
-For this tutorial, we will be using Nginx to impliment an active-active load balancing. Like the last section, we are going to assume that you have read the prior sections or, at the very least, have an basic understanding of the things being discussed. With that out of the way, let's jump right in!
+For this tutorial, we will be using Nginx to implement an active-active load balancing. Like the last section, we are going to assume that you have read the prior sections or, at the very least, have a basic understanding of the things being discussed. With that out of the way, let's jump right in!
 
 *Updated at 3:30pm on June 13, 2019*
 
@@ -209,13 +209,17 @@ For this tutorial, we will be using Nginx to impliment an active-active load bal
 1. Create another t2.micro instance with an Ubuntu AMI and expose port 80.
   - You cannot run Nginx with Amazon Linux distro. Nginx recommends Ubuntu.
   - For ubuntu, your SSH command will be slightly different. Instead of `... ec-user@<publicDNS>`, your username will be 'ubuntu. So, you would write `... ubunutu@<publicDNS>`. 
-2. SSH into your instance, install pip, ansible, and use ansible to instal Nginx. For your convenience,
+2. SSH into your instance, update everything and install Nginx.
 
 ```
 sudo apt update
 sudo apt install nginx
 
 ```
+  - Now navigate to your load balancer's public DNS in your browser. Do you see this splash page? Awesome! As the splash page suggests, we need to configure some files.
+
+![Nginx Splash Page](https://imgur.com/ZLOCb9F.jpg)
+
 3. Let's `cd /etc/nginx/sites-available` and `sudo vim default`. In this file we will be inserting an upstream directive and updating the location to use that directive. 
 
 The upstream directive 
@@ -242,11 +246,14 @@ server {
 [Example](https://imgur.com/oGTzCh9.jpg)
   - Right now we only have one upstream. When we add in other upstreams, Nginx will use a the least connected algorithm to distribute traffic. If you omit `least_conn;`, Nginx will default to a round robin distribution.
 
-Now navigate to your load balancer's public DNS in your browser. Do you see this splash page?
+4. Almost done! Just restart the service with `sudo service nginx restart` and go back to the EC2 portal.
+5. Select your load balancer, find it's security group, and add an outbound rule with the type 'All Traffic'. Take a guess what we are doing here. Okay, that was kind of a gimme. We are making our load balancer internet facing! Grab the load balancer's public dns, open a new tab, and plop it in the address bar. 🧙‍ Magic 🧙‍
 
-![Nginx Splash Page](https://imgur.com/ZLOCb9F.jpg)
+![Empty Service](https://imgur.com/j6lM3pt)
 
-Yes? Nice work! You just successfully installed Nginx. We are only a couple steps away from having it work its magic. 
+This may be more exciting for some. As you may have noticed, we are not pulling anything in from the database. That's an easy fix.
+
+6. Go back to your security group and add an inbound rule for your database.
 
 
 <details><summary>
@@ -254,7 +261,7 @@ Yes? Nice work! You just successfully installed Nginx. We are only a couple step
 
 1. ~~Now lets set up an elastic IP address. Back in the EC2 dashboard, click on the 'Elastic IPs', just below 'Security Groups'. Click 'Allocate new address' and then 'Allocate'.~~
 2. ~~Back in the sidebar, click on 'Load Balancers' and click 'Create Load Balancer'. This is where things get fun! Read over all of the options and think about what load balancer will fit our use case. If you picked the network load balancer, you picked correctly! Speed is the name of the game today.~~ 
-  - ~~On the next page, name your network load balancer, or nlb for short. The default settings, internet facing, TCP, and port 80, should all be suffice. In 'Availabilty Zones', pick a sub-zones and make sure your teammates pick the same subzone, change IPv4 address to 'Choose an Elastic IP' and pick the Elastic IP that you created in the prior step.~~
+  - ~~On the next page, name your network load balancer, or nlb for short. The default settings, internet facing, TCP, and port 80, should all be suffice. In 'Availability Zones', pick a sub-zones and make sure your teammates pick the same subzone, change IPv4 address to 'Choose an Elastic IP' and pick the Elastic IP that you created in the prior step.~~
 3. ~~You can skip over the security section. You might get some warning suggesting TLS protocol. Just ignore it, we don't need to burn an SSL certificates today.~~
 4. ~~On the next page, stick with all of the defaults. Just give your target group a name. Before you click on through to the next page, take a moment to read the tooltips for each form, including the advanced health checks.~~
 5. ~~On the next page, 'Register Targets', you will want to register the load balancer instance that you just created.~~
@@ -296,3 +303,8 @@ http{
 [Nginx.org docs for HTTP load balancing](http://nginx.org/en/docs/http/load_balancing.html)
 
 [The amazing Nginx docs that should be the gold model of documentation](https://docs.nginx.com/nginx/deployment-guides/amazon-web-services/ec2-instances-for-nginx/)
+
+
+# Credits
+
+- Jordan Boles, grammar strategist
