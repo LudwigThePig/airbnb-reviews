@@ -203,36 +203,44 @@ You now have all the tools that you need to set up a node server. These same pri
 
 For this tutorial, we will be using Nginx to impliment an active-active load balancing. Like the last section, we are going to assume that you have read the prior sections or, at the very least, have an basic understanding of the things being discussed. With that out of the way, let's jump right in!
 
+*Updated at 3:30pm on June 13, 2019*
+
+
 1. Create another t2.micro instance with an Ubuntu AMI and expose port 80.
   - You cannot run Nginx with Amazon Linux distro. Nginx recommends Ubuntu.
-  - For ubuntu, your SSH command will be slightly different. Instead of `... ec-user@<publicDNS>`, your username will be 'ubuntu. So, you would write `... ubunutu@<publicDNS>`.
+  - For ubuntu, your SSH command will be slightly different. Instead of `... ec-user@<publicDNS>`, your username will be 'ubuntu. So, you would write `... ubunutu@<publicDNS>`. 
 2. SSH into your instance, install pip, ansible, and use ansible to instal Nginx. For your convenience,
 
 ```
 sudo apt update
-sudo apt install python-pip -y
-sudo pip install ansible
-ansible-galaxy install nginxinc.nginx
-```
-  - Let's break down some of these installs.
-    - Pip is the package manager for Python. It will let us install ansible. 
-    - Ansible is an open-source CD (continuous deployment) platform that plays nicely with Nginx. Don't worry too much about this right now.
-3. Create a playbook.yml. A playbook is a way to execute ad-hoc tasks with Ansible. They can be as simple or complex as we need them to be. Luckily, we will be writting a fairly simple playbook. In the YML, enter the following,
-```
----
-- hosts: localhost
-  become: true
-  roles:
-    - role: nginxinc.nginx
-```
-  - Are you wondering, how do I edit it? where is my text editor? There a number of ways to edit files from the command line but the most straighforward way is to run `vim playbook.yml`. Is this greek to you? If you said yes, I am very sorry. This is vim, the text editor du jour in 90s. Explore this dark and mysterious place on your own time and come back to this guide when you have successfully escaped from its old world entrapments. 
+sudo apt install nginx
 
-4. Run your playbook.yml through ansible-playbook by running `ansible-playbook playbook.yml`. After Ansible runs through your playbook, you should see something like this,
+```
+3. Let's `cd /etc/nginx/sites-available` and `sudo vim default`. In this file we will be inserting an upstream directive and updating the location to use that directive. 
 
-![Ansible Playbook](https://imgur.com/B37Gfjh.jpg)
+The upstream directive 
 
-5. That's all we need to do in the shell for the moment. Let's divert our attention to our security group. In the left sidebar of the EC2 dashboard, scroll down to Network & Security and select security groups. Locate the security group that you want to redirect traffic to and copy its 'Group Id'. Then, select the security group associated with your proxy and add a customt TCP outbound rule with the service's 'Group Id' as the destination. It should look like so, 
-![Outbound Rules](https://imgur.com/ZTElK55.jpg)
+```
+upstream myFancyApp {
+  least_conn; 
+  server <yourPublicDNS>:<yourPort>
+}
+```
+
+The Updated Location 
+
+```
+server {
+  ...
+  location / {
+    proxy_pass http://myFancyApp
+  }
+  ...
+}
+```
+
+[Example](https://imgur.com/oGTzCh9.jpg)
+  - Right now we only have one upstream. When we add in other upstreams, Nginx will use a the least connected algorithm to distribute traffic. If you omit `least_conn;`, Nginx will default to a round robin distribution.
 
 Now navigate to your load balancer's public DNS in your browser. Do you see this splash page?
 
@@ -243,7 +251,6 @@ Yes? Nice work! You just successfully installed Nginx. We are only a couple step
 
 <details><summary>
 <b>THIS COLLAPSED SECTION HAS BEEN REDACTED. It contains a tutorial for the AWS's baked in load balancer. Do ignore.</b></summary>
-
 
 1. ~~Now lets set up an elastic IP address. Back in the EC2 dashboard, click on the 'Elastic IPs', just below 'Security Groups'. Click 'Allocate new address' and then 'Allocate'.~~
 2. ~~Back in the sidebar, click on 'Load Balancers' and click 'Create Load Balancer'. This is where things get fun! Read over all of the options and think about what load balancer will fit our use case. If you picked the network load balancer, you picked correctly! Speed is the name of the game today.~~ 
@@ -268,7 +275,7 @@ http{
   ...
   upstream myapp1 {
     least_conn;
-    server <yourPublicDNS1>.amazonaws.com:3004;
+    server <yourPublicDNS1>.amazonaws.com:<yourPortNumber>;
     }
   server {
     listen 80;
@@ -280,7 +287,6 @@ http{
 }
 
 ```
-  - Right now we only have one upstream. When we add in other upstreams, Nginx will use a the least connected algorithm to distribute traffic. If you omit `least_conn;`, Nginx will default to a round robin distribution.
 
 
 # Resources
