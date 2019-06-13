@@ -227,7 +227,7 @@ The upstream directive
 ```
 upstream myFancyApp {
   least_conn; 
-  server <yourService'sPublicDNS>:<yourPort>
+  server <yourService'sPublicDNS>:<yourPort>;
 }
 ```
 
@@ -237,7 +237,7 @@ The Updated Location
 server {
   ...
   location / {
-    proxy_pass http://myFancyApp
+    proxy_pass http://myFancyApp;
   }
   ...
 }
