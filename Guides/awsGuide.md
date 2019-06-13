@@ -37,7 +37,13 @@ If you answered no to any of these, you will be coughing up some dough to the AW
 **What Instance Type** Instance types vary by memory size and CPU cores. Project specifications require that we use a t2-micro, which comes with a 1gb of RAM, one CPU core, and a couple hundred mB/s of data transfer. That should be plenty for one instance
   - *What about storage size?*, actual HDD or SSD space will be defined by EBS, which stands for Elastic Block Store, not Beanstalk. Confusing, right? We'll get there
 
-**What is a load balancer?** A load balancer can do a couple of things but its primary function is distrubuting requests in a sensible way across a cluster of servers. Think of it as the TSA agent at airport security who tells you which line to enter. The agent will direct traffic evenly across all open lines. If it is slow, there may only be two or three lines open, and if it's Christmas Eve at LaGuardia, all the lines will be open.
+**What is a load balancer?** A load balancer can do a couple of things but its primary function is distrubuting requests in a sensible way across a cluster of servers. Think of it as the TSA agent at airport security who tells you which line to enter. The agent will direct traffic in such a way that want line does not get over whelmed with traffic.
+
+There are two types of load balancers, *active-passive* and *active-active*. Active-passive involve a chain of servers whereby one server take all of the traffic until they are at capacity. When they reach capacity, they forward traffic on to the next server in the chain. Active-passive load balancers are sometimes referred to cascading load balancers or failover servers. Active-active load balancers evenly spread the traffic across a cluster of servers. Most of the time, it will use a round robin scheduling algorithm. 
+
+In the airport security example, an active-passive load balancer will fill up one line before opening another line up and directing traffic to the new line. An active-active load balancer would have all lines open and distribute traffic in such a way that the queue in each line took the same amount of time. The active-passive will be more cost effective because the airport will have to employ fewer TSA agents but the wait time will be longer. If speed is an important feature, one should opt for an active-active load balancer. 
+
+Because speed is the primary feature of our SDC, we will be implementing an active-active load balancer. If you are careful with your instance, the cost of the instances will not exceed your free tier hours.
 
 ---
 # Databases
@@ -57,6 +63,7 @@ Let's launch our first instance! To set up your database,
   - Add another rule to expose our database's port to outside traffic. The default port for Mongo is 27017 and 5432 for PostgreSQL. You can set the source to 'My IP' but you will need to add another rule later on to accomodate the IP addresses of your deployed service and proxy.
   - When it's all done, it should look something like this,
 **Note: the port in this screenshot is incorrect. the default port for mongo is 27017, NOT 27071!**
+
 ![Security Group](https://imgur.com/aoeXHcf.jpg)
 
 5. Click 'Review and Launch', then 'Launch'!
@@ -64,6 +71,7 @@ Let's launch our first instance! To set up your database,
 6. You will be prompted to pick a key/value pair. Create a new key pair, download, keep it secret, keep it safe. This will allow you to SSH into your instance.
 
 ![keept it secret](https://media.giphy.com/media/3oFyCYNrra8qo1Cv8Q/giphy.gif)
+
   -  On Windows, you will need to set explicit permissions for this file. If this file is too open, you cannot SSH with it. [How to set permissions Windows](https://superuser.com/questions/1296024/windows-ssh-permissions-for-private-key-are-too-open). Trev and Jordan, if you encounter this problem, just by a Windows machine, or make a bullet point on how to resolve this issue.
 
 Congrats, you have just created your first EC2 instance! Now it's time to SSH into your Virtual Machine.
@@ -77,7 +85,9 @@ SSHing is the practice of opening a secure TCP connection with the shell on a se
 2. Run `ssh -i ./<fileWithSSHKey>.pem ec2-user@<yourPublicDNS>.compute.amazonaws.com`. You can find your public DNS in your EC2 Dashboard.
   - On OSX, you may need to run `sudo ssh <...>`
   - If all went well, you should see something like this,
+
 ![successful SSH](https://imgur.com/kRA06W6.jpg)
+
   - To exit the shell at anytime, type `exit` and hit enter.
 3. If that worked, try typing `mongo` into the shell. Did that work? Great! Now you know enough to be dangerous. To get started, type `db.myCollection.insert({foo: 'bar'})` 10,000,000 times... Hmm, there has got to be a better way of doing this.
 
@@ -170,7 +180,9 @@ I guess we tackled the *what* and *how* questions with that absurd analogy. So, 
 
 1. To get started with PM2, SSH back into your instance and run `npm install pm2 -g`
 2. Then navigate to the root level of your directory and run `pm2 start <thePathAndNameOfYourServerFile>`. If all goes well, you will see something like this,
+
 ![PM2 started](https://imgur.com/lIouGkL.jpg).
+
 3. Now, exit your SSH and open up your service in your web browser. Did everything load? Great! Before you move forward, you should pay a visit to the PM2 docs and dig into the `pm2` commands. [Here is a good starting point](http://pm2.keymetrics.io/docs/usage/process-management/). Here is a little cheat-sheet for your convenience:
 
 | Command  | Description  |
@@ -189,7 +201,7 @@ You now have all the tools that you need to set up a node server. These same pri
 
 # Load Balancer
 
-For this tutorial, we will be using Nginx to handle load balancing. Like the last section, we are going to assume that you have read the prior sections or, at the very least, have an basic understanding of the things being discussed. With each section, we will be moving through the content a lot faster. Let's jump right on in!
+For this tutorial, we will be using Nginx to impliment an active-active load balancing. Like the last section, we are going to assume that you have read the prior sections or, at the very least, have an basic understanding of the things being discussed. With that out of the way, let's jump right in!
 
 1. Create another t2.micro instance with an Ubuntu AMI and expose port 80.
   - You cannot run Nginx with Amazon Linux distro. Nginx recommends Ubuntu.
@@ -202,11 +214,10 @@ sudo apt install python-pip -y
 sudo pip install ansible
 ansible-galaxy install nginxinc.nginx
 ```
-  - Let's break down some of these packages.
-    - Pip is the package manager for Python. 
+  - Let's break down some of these installs.
+    - Pip is the package manager for Python. It will let us install ansible. 
     - Ansible is an open-source CD (continuous deployment) platform that plays nicely with Nginx. Don't worry too much about this right now.
-  - Told you we are going to be moving faster :)
-3. Create a playbook.yml. In the YML, enter the following,
+3. Create a playbook.yml. A playbook is a way to execute ad-hoc tasks with Ansible. They can be as simple or complex as we need them to be. Luckily, we will be writting a fairly simple playbook. In the YML, enter the following,
 ```
 ---
 - hosts: localhost
@@ -214,21 +225,35 @@ ansible-galaxy install nginxinc.nginx
   roles:
     - role: nginxinc.nginx
 ```
+  - Are you wondering, how do I edit it? where is my text editor? There a number of ways to edit files from the command line but the most straighforward way is to run `vim playbook.yml`. Is this greek to you? If you said yes, I am very sorry. This is vim, the text editor du jour in 90s. Explore this dark and mysterious place on your own time and come back to this guide when you have successfully escaped from its old world entrapments. 
+
 4. Run your playbook.yml through ansible-playbook by running `ansible-playbook playbook.yml`. After Ansible runs through your playbook, you should see something like this,
+
 ![Ansible Playbook](https://imgur.com/B37Gfjh.jpg)
+
 5. That's all we need to do in the shell for the moment. Let's divert our attention to our security group. In the left sidebar of the EC2 dashboard, scroll down to Network & Security and select security groups. Locate the security group that you want to redirect traffic to and copy its 'Group Id'. Then, select the security group associated with your proxy and add a customt TCP outbound rule with the service's 'Group Id' as the destination. It should look like so, 
 ![Outbound Rules](https://imgur.com/ZTElK55.jpg)
 
 Now navigate to your load balancer's public DNS in your browser. Do you see this splash page?
-[Nginx Splash Page](https://imgur.com/ZLOCb9F.jpg)
 
-Yes? Nice work! You just sucefully installed Nginx. We are only a couple steps away from having it work its magic. 
+![Nginx Splash Page](https://imgur.com/ZLOCb9F.jpg)
+
+Yes? Nice work! You just successfully installed Nginx. We are only a couple steps away from having it work its magic. 
+
+[WORK IN PROGRESS]
+
+1. Now lets set up an elastic IP address. Back in the EC2 dashboard, click on the 'Elastic IPs', just below 'Security Groups'. Click 'Allocate new address' and then 'Allocate'.
+2. Back in the sidebar, click on 'Load Balancers' and click 'Create Load Balancer'. This is where things get fun! Read over all of the options and think about what load balancer will fit our use case. If you picked the network load balancer, you picked correctly! Speed is the name of the game today. 
+  - On the next page, name your network load balancer, or nlb for short. The default settings, internet facing, TCP, and port 80, should all be suffice. In 'Availabilty Zones', pick a sub-zones and make sure your teammates pick the same subzone, change IPv4 address to 'Choose an Elastic IP' and pick the Elastic IP that you created in the prior step.
+
+  ![Aval Zones](https://imgur.com/rmYruPy.jpg)
+
+  - Then, click Next...
 
 
 
 # Resources
 
-
 [Super awesome resource that helped me write Service guide](https://medium.com/@nishankjaintdk/setting-up-a-node-js-app-on-a-linux-ami-on-an-aws-ec2-instance-with-nginx-59cbc1bcc68c)
 
-[The amazing Nginx docs that should be the gold model of documentation](https://docs.nginx.com/nginx/deployment-guides/amazon-web-services/ec2-instances-for-nginx/)
+![The amazing Nginx docs that should be the gold model of documentation](https://docs.nginx.com/nginx/deployment-guides/amazon-web-services/ec2-instances-for-nginx/)
