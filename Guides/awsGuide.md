@@ -245,6 +245,10 @@ Yes? Nice work! You just successfully installed Nginx. We are only a couple step
 1. Now lets set up an elastic IP address. Back in the EC2 dashboard, click on the 'Elastic IPs', just below 'Security Groups'. Click 'Allocate new address' and then 'Allocate'.
 2. Back in the sidebar, click on 'Load Balancers' and click 'Create Load Balancer'. This is where things get fun! Read over all of the options and think about what load balancer will fit our use case. If you picked the network load balancer, you picked correctly! Speed is the name of the game today. 
   - On the next page, name your network load balancer, or nlb for short. The default settings, internet facing, TCP, and port 80, should all be suffice. In 'Availabilty Zones', pick a sub-zones and make sure your teammates pick the same subzone, change IPv4 address to 'Choose an Elastic IP' and pick the Elastic IP that you created in the prior step.
+3. You can skip over the security section. You might get some warning suggesting TLS protocol. Just ignore it, we don't need to burn an SSL certificates today.
+4. On the next page, stick with all of the defaults. Just give your target group a name. Before you click on through to the next page, take a moment to read the tooltips for each form, including the advanced health checks.
+5. On the next page, 'Register Targets', you will want to register the load balancer instance that you just created.
+6. Review, create, and pop that public DNS into your address bar. Well, you might want to wait a couple of minutes first for the nlb to finish provisioning.
 
   ![Aval Zones](https://imgur.com/rmYruPy.jpg)
 
