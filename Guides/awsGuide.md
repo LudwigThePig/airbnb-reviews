@@ -241,7 +241,9 @@ Now navigate to your load balancer's public DNS in your browser. Do you see this
 Yes? Nice work! You just successfully installed Nginx. We are only a couple steps away from having it work its magic. 
 
 
-**THIS SECTION IS REDACTED. This is how one set's up an AWS NLB. We do not want to use baked in load balancers**
+<details><summary>
+<b>THIS COLLAPSED SECTION HAS BEEN REDACTED. It contains a tutorial for the AWS's baked in load balancer. Do ignore.</b></summary>
+
 
 1. ~~Now lets set up an elastic IP address. Back in the EC2 dashboard, click on the 'Elastic IPs', just below 'Security Groups'. Click 'Allocate new address' and then 'Allocate'.~~
 2. ~~Back in the sidebar, click on 'Load Balancers' and click 'Create Load Balancer'. This is where things get fun! Read over all of the options and think about what load balancer will fit our use case. If you picked the network load balancer, you picked correctly! Speed is the name of the game today.~~ 
@@ -251,12 +253,40 @@ Yes? Nice work! You just successfully installed Nginx. We are only a couple step
 5. ~~On the next page, 'Register Targets', you will want to register the load balancer instance that you just created.~~
 6. ~~Review, create, and pop that public DNS into your address bar. Well, you might want to wait a couple of minutes first for the nlb to finish provisioning.~~
 
-  ~~[Aval Zones](https://imgur.com/rmYruPy.jpg)~~
+  ![Aval Zones](https://imgur.com/rmYruPy.jpg)
+  <b>End of redacted section</b>
+</details>
 
+Now that we have Nginx running, it is time to start configuring!
+
+1. In your SSH, `cd /etc/nginx` and `sudo vim nginx.conf`.
+  - If you have not yet mastered the dark arts of vim, my thoughts and prayers go out to you.
+2. In the 'http' block, insert,
+
+```
+http{
+  ...
+  upstream myapp1 {
+    least_conn;
+    server <yourPublicDNS1>.amazonaws.com:3004;
+    }
+  server {
+    listen 80;
+    location / {
+      proxy_pass http://myapp1;
+    }                                                                                         
+  }
+  ...
+}
+
+```
+  - Right now we only have one upstream. When we add in other upstreams, Nginx will use a the least connected algorithm to distribute traffic. If you omit `least_conn;`, Nginx will default to a round robin distribution.
 
 
 # Resources
 
 [Super awesome resource that helped me write Service guide](https://medium.com/@nishankjaintdk/setting-up-a-node-js-app-on-a-linux-ami-on-an-aws-ec2-instance-with-nginx-59cbc1bcc68c)
 
-![The amazing Nginx docs that should be the gold model of documentation](https://docs.nginx.com/nginx/deployment-guides/amazon-web-services/ec2-instances-for-nginx/)
+[Nginx.org docs for HTTP load balancing](http://nginx.org/en/docs/http/load_balancing.html)
+
+[The amazing Nginx docs that should be the gold model of documentation](https://docs.nginx.com/nginx/deployment-guides/amazon-web-services/ec2-instances-for-nginx/)
