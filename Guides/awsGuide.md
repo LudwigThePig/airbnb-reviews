@@ -252,7 +252,17 @@ server {
 
 ![Empty Service](https://imgur.com/j6lM3pt)
 
-This may be more exciting for some. As you may have noticed, we are not pulling anything in from the database. That's an easy fix.
+This may be more exciting for some. As you may have noticed, we are not pulling anything in from the database. That's an easy fix but before we do that. Let's investigate the problem. Open up your network panel and pay close attention to the request url.
+
+![Load balancer request](https://imgur.com/V3czYLO.jpg)
+
+What do you think is going on here? What are we requesting exactly? The url says that we are requesting our server endpoint, but on the load balancer. That is strange, right? Look at your HTTP requests. What does your url looks like? Does it looks something like this? 
+
+`http://${document.location.hostname}/api/awesomeEndPoint`
+
+At this point in time, your `document.location.hostname` is the load balancer. Well that makes sense. How can we fix this now? I can think of an easy way and a tricky way of doing this. The easy way would be to hardcode our URLs to be the ec2 instance's public dns. It works but what if that changes? If you are up against a deadline and you are going to scrap this project shortly there after, this would be okay, but you are following this super awesome guide and you are a week ahead on deliverables. So, let's do this the right way. Now what would be the right way of doing this?
+
+If you are thinking we need to dig back into the Nginx config files, you are correct!
 
 6. Go back to your security group and add an inbound rule for your database.
 7. Then, back in your SSH, `cd /etc/nginx` and `sudo vim nginx.conf`. In this file, we will add a stream directive. Before we were editing an HTTP directive. Think for a second, why would HTTP be a problem for a database? Databases connect over TCP, not HTTP. That is what Stream will do for us. With that in mind, will 
