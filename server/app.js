@@ -17,7 +17,7 @@ app.use(cors());
 // Routes
 app.get('/api/listings/reviews/:id', (req, res) => {
   let listing_id = req.params.id;
-
+  console.log('we made it!')
   database.getReviews(listing_id, (err, data) => {
     if (err) {
       res.status(400)

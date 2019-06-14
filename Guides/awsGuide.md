@@ -244,6 +244,7 @@ server {
 ```
 
 [Example](https://imgur.com/oGTzCh9.jpg)
+  - There already be a `location /` block. Comment out whatever is already in there and add your upstream directive.
   - Right now we only have one upstream. When we add in other upstreams, Nginx will use a the least connected algorithm to distribute traffic. If you omit `least_conn;`, Nginx will default to a round robin distribution.
 
 4. Almost done! Just restart the service with `sudo service nginx restart` and go back to the EC2 portal.
@@ -254,6 +255,23 @@ server {
 This may be more exciting for some. As you may have noticed, we are not pulling anything in from the database. That's an easy fix.
 
 6. Go back to your security group and add an inbound rule for your database.
+7. Then, back in your SSH, `cd /etc/nginx` and `sudo vim nginx.conf`. In this file, we will add a stream directive. Before we were editing an HTTP directive. Think for a second, why would HTTP be a problem for a database? Databases connect over TCP, not HTTP. That is what Stream will do for us. With that in mind, will 
+
+```
+stream {
+
+    upstream mongo {
+        server ec2-54-244-61-237.us-west-2.compute.amazonaws.com:27017;
+    }
+
+    server {
+        listen 27017;
+        proxy_connect_timeout 1s;
+        proxy_timeout 3s;
+        proxy_pass mongo;
+    }
+}
+```
 
 
 # Resources
@@ -264,6 +282,7 @@ This may be more exciting for some. As you may have noticed, we are not pulling 
 
 [The amazing Nginx docs that should be the gold model of documentation](https://docs.nginx.com/nginx/deployment-guides/amazon-web-services/ec2-instances-for-nginx/)
 
+[Stack Overflow post on Nginx and Mongo](https://stackoverflow.com/questions/31853755/how-to-setup-mongodb-behind-nginx-reverse-proxy)
 
 # Credits
 
