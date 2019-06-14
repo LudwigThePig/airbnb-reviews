@@ -289,6 +289,48 @@ You know what to do next. SSH back into your load balancer and add your snazy ne
 
 Just glue them together silly!
 
+[This section is EXTRA experimental. Proceed at your own risk.]
+
+
+server.js
+
+``` js
+// Our Imports, install any packages that you do not have already
+const React = require('react');
+const ReactDOMServer = require('react-dom/server');
+
+const DOM = require('react-dom-factories')
+
+const body = DOM.body;
+const div = DOM.div;
+const script = DOM.script;
+
+let html = ReactDOMServer.renderToStaticMarkup(
+  body(
+    null,
+    div({
+      id: 'reviews',
+      dangerouslySetInnerHTML: {
+        __html: ReactDOMServer.renderToSTring(Service())
+      }
+    }),
+    script({
+      dangerouslySetInnerHTML: {
+        __html: `var APP_PROPS = ${safeStringify(props)};`
+      }
+    }),
+    // React CDN. Faster downloads!
+    script({src: 'https://cdn.jsdelivr.net/npm/react@16.7.0/umd/react.production.min.js'}),
+    script({src: 'https://cdn.jsdelivr.net/npm/react-dom@16.7.0/umd/react-dom.production.min.js'}),
+    script({src: 'https://cdn.jsdelivr.net/npm/react-dom-factories@1.0.2/index.min.js'}),
+    script({src: 'https://cdn.jsdelivr.net/npm/create-react-class@15.6.3/create-react-class.min.js'}),
+  )
+)
+
+const Service = React.createFactory(require('../client/components/App'));
+
+```
+
 # Resources
 
 [Super awesome resource that helped me write Service guide](https://medium.com/@nishankjaintdk/setting-up-a-node-js-app-on-a-linux-ami-on-an-aws-ec2-instance-with-nginx-59cbc1bcc68c)
@@ -300,6 +342,11 @@ Just glue them together silly!
 [Stack Overflow post on Nginx and Mongo](https://stackoverflow.com/questions/31853755/how-to-setup-mongodb-behind-nginx-reverse-proxy)
 
 [Nginx docs on location](https://nginx.org/en/docs/http/ngx_http_core_module.html#location)
+
+[Server Side React](https://reactjs.org/docs/react-dom-server.html)
+
+[SSR React Example](https://github.com/mhart/react-server-example)
+
 
 # Credits
 
