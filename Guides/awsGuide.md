@@ -258,47 +258,22 @@ This may be more exciting for some. As you may have noticed, we are not pulling 
 
 What do you think is going on here? What are we requesting exactly? The url says that we are requesting our server endpoint, but on the load balancer. That is strange, right? Look at your HTTP requests. What does your url looks like? Does it looks something like this? 
 
-`http://${document.location.hostname}/api/pointyEnders`
+`http://${document.location.hostname}:3001/api/pointyEnders`
 
 At this point in time, your `document.location.hostname` is the load balancer. Well that makes sense. How can we fix this now? I can think of an easy way and a tricky way of doing this. The easy way would be to hardcode our URLs to be the ec2 instance's public dns. It works but what if that changes? what if you have multiple EC2 instances with multiple addresses? If you are up against a deadline and you are going to scrap this project shortly there after, this would be okay, but you are following this super awesome guide and you are a week ahead on deliverables. So, let's do this the right way. Now what would be the right way of doing this?
 
 If you are thinking we need to dig back into the Nginx config files, you are correct!
 
 6. In your SSH, open up the default file in '/etc/nginx/sites-available/'. 
-  - Remember this bad boy? He redirects traffic from our nginx server to our service. Take a look at what is going here. We set up an upstream directive and created a 'location /' directive. The '/' is a rule. Anytime someone requests an endpoint starting with '/', they are forwarded to one of the URLs in our upstream directive. So, what happens when someone requests '/api/pointyEnders'? They get redirected to '/' on the service. We need to fix that.
-  - Change `location /` to `location = /`. Now only requests to '/' will match this rule.
-  - Then, add a rule for each of your server endpoints. Instead of trying to theorize this step, let's look at an example and break it down.
-```
-location ~ ^/api/pointEnder/(.*) {
-  proxy_pass http://myFancyApp/api/pointyEnder/$args
-}
-```
-  - **'~'** specifies that we are matching a regular expression. 
-  - **'^'** is anchor that matches anything that starts with the following string.
-  - **'myFancyApp'** comes from the upstream directive that we created in step 3.
-  - **'$args'** is an embedded variable  any arguments that may have been supplied with the URL. Arguments include parameters and queries.
 
-[Still verifying this step]
+Remember this bad boy? He redirects traffic from our nginx server to our service. Take a closer look at the **server** stanza and compare it to our request url. There is some incongruity here. Do you see what it is? It does not have anything to do with the endpoint and it probably is not the server name or the root. If you are thinking it is the port, then congrats, you have succesfully reasoned using the process of elimination!
 
-7. `sudo service nginx restart` and give 'er a whirl. If you are not full operational at this point, you are on your own! I hope you have as much fun as I had writting this section of the guide.
-6. ~~Go back to your security group and add an inbound rule for your database.~~
-7. ~~Then, back in your SSH, `cd /etc/nginx` and `sudo vim nginx.conf`. In this file, we will add a stream directive. Before we were editing an HTTP directive. Think for a second, why would HTTP be a problem for a database? Databases connect over TCP, not HTTP. That is what Stream will do for us. With that in mind, will~~
+We need to be listening on whatever port our app is requesting. Alternatively, we could change our fetch requests to request port 80 and set up another Nginx layer on the application server that redirects traffic to whatever port the server is listening to. For the sake of brevity and speed, we will ignore that option in this guide. 
 
-```
-stream {
+In Nginx, server stanza's are limited to one port. So, let create anothe server stanza that listens on our port. Then, add another location rule that redirects to our upstream directive. It will look something like this,
 
-    upstream mongo {
-        server ec2-54-244-61-237.us-west-2.compute.amazonaws.com:27017;
-    }
 
-    server {
-        listen 27017;
-        proxy_connect_timeout 1s;
-        proxy_timeout 3s;
-        proxy_pass mongo;
-    }
-}
-```
+![Our new default](https://imgur.com/9uLxcnX.jpg)
 
 
 # Resources
