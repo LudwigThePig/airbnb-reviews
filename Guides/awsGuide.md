@@ -276,6 +276,16 @@ In Nginx, server stanza's are limited to one port. So, let create anothe server 
 ![Our new default](https://imgur.com/9uLxcnX.jpg)
 
 
+## Creating Multiple Instances to Load Balance
+
+We have come a long way from using pre-made EC2 AMIs for our database and opening up our first SSH. Now it is time to reap the fruits of our labor. Head over to the AWS portal and select the service instance that you want to duplicate for our load balancer. Click 'Actions', go down to 'Image', and select 'Create Image'.
+
+![Create Image](https://imgur.com/mLmw1dm.jpg)
+
+Give it a couple of minutes to work its magic and, when it is done, click 'Launch'. You can and should use the same security group and SSH key as your other service. SSH into your new instance and, voila, everything is there, including your .env file. All you need to do is locate your server file and `pm2 start <yourServerFile>.js`. Test out your instance in the browser. Does it work? Of course it does! You are killing it.
+
+You know what to do next. SSH back into your load balancer and add your snazy new URL to the upstream directive and that's it!
+
 # Resources
 
 [Super awesome resource that helped me write Service guide](https://medium.com/@nishankjaintdk/setting-up-a-node-js-app-on-a-linux-ami-on-an-aws-ec2-instance-with-nginx-59cbc1bcc68c)
