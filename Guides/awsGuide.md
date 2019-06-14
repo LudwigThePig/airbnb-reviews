@@ -7,7 +7,7 @@ In this guide, you will learn how to deploy your database, service, and proxy to
 1. [Setting your database](#Databases)
 1. [Deploying your service](#Services)
 1. [Using a load balancer](#Load-Balancer)
-1. [Deploying your proxy](#Proxies)
+1. [Preparing for the proxy](#Proxy-Prep)
 1. [Resources](#Resources)
 
 ---
@@ -250,7 +250,7 @@ server {
 4. Almost done! Just restart the service with `sudo service nginx restart` and go back to the EC2 portal.
 5. Select your load balancer, find it's security group, and add an outbound rule with the type 'All Traffic'. Take a guess what we are doing here. Okay, that was kind of a gimme. We are making our load balancer internet facing! Grab the load balancer's public dns, open a new tab, and plop it in the address bar. 🧙‍ Magic 🧙‍
 
-![Empty Service](https://imgur.com/j6lM3pt)
+![Empty Service](https://imgur.com/j6lM3pt.jpg)
 
 This may be more exciting for some. As you may have noticed, we are not pulling anything in from the database. That's an easy fix but before we do that. Let's investigate the problem. Open up your network panel and pay close attention to the request url.
 
@@ -260,9 +260,7 @@ What do you think is going on here? What are we requesting exactly? The url says
 
 `http://${document.location.hostname}:3001/api/pointyEnders`
 
-At this point in time, your `document.location.hostname` is the load balancer. Well that makes sense. How can we fix this now? I can think of an easy way and a tricky way of doing this. The easy way would be to hardcode our URLs to be the ec2 instance's public dns. It works but what if that changes? what if you have multiple EC2 instances with multiple addresses? If you are up against a deadline and you are going to scrap this project shortly there after, this would be okay, but you are following this super awesome guide and you are a week ahead on deliverables. So, let's do this the right way. Now what would be the right way of doing this?
-
-If you are thinking we need to dig back into the Nginx config files, you are correct!
+That is perfect for our use case. We will just have to dig back into the Nginx config files and make a few tweaks.
 
 6. In your SSH, open up the default file in '/etc/nginx/sites-available/'. 
 
@@ -270,10 +268,11 @@ Remember this bad boy? He redirects traffic from our nginx server to our service
 
 We need to be listening on whatever port our app is requesting. Alternatively, we could change our fetch requests to request port 80 and set up another Nginx layer on the application server that redirects traffic to whatever port the server is listening to. For the sake of brevity and speed, we will ignore that option in this guide. 
 
-In Nginx, server stanza's are limited to one port. So, let create anothe server stanza that listens on our port. Then, add another location rule that redirects to our upstream directive. It will look something like this,
-
+In Nginx, server stanza's are limited to one port. So, let create another server stanza that listens on our port. Then, add another location rule that redirects to our upstream directive. It will look something like this,
 
 ![Our new default](https://imgur.com/9uLxcnX.jpg)
+
+Looks great. Restart the service and give it a whirl.
 
 
 ## Creating Multiple Instances to Load Balance
@@ -285,6 +284,10 @@ We have come a long way from using pre-made EC2 AMIs for our database and openin
 Give it a couple of minutes to work its magic and, when it is done, click 'Launch'. You can and should use the same security group and SSH key as your other service. SSH into your new instance and, voila, everything is there, including your .env file. All you need to do is locate your server file and `pm2 start <yourServerFile>.js`. Test out your instance in the browser. Does it work? Of course it does! You are killing it.
 
 You know what to do next. SSH back into your load balancer and add your snazy new URL to the upstream directive and that's it!
+
+# Proxy Prep
+
+Just glue them together silly!
 
 # Resources
 
