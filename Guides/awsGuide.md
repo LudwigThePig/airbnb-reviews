@@ -97,7 +97,7 @@ SSHing is the practice of opening a secure TCP connection with the shell on a se
 SSHing is great for setting up our server and database but we cannot SSH into our server everytime we want to query our database. Instead, we will want to set up a connection string and connect to the port. We already exposed our port. All we need to do is procure a _username_, _password_, _URL_, and that _port_.
 
 1. Let's start with our username and password. In the Mongo shell, enter the following.
-  ```
+  ```Bash
   use myDatabase
   db.createUser(
     {
@@ -211,10 +211,9 @@ For this tutorial, we will be using Nginx to implement an active-active load bal
   - For ubuntu, your SSH command will be slightly different. Instead of `... ec-user@<publicDNS>`, your username will be 'ubuntu. So, you would write `... ubunutu@<publicDNS>`. 
 2. SSH into your instance, update everything and install Nginx.
 
-```
+```c
 sudo apt update
 sudo apt install nginx
-
 ```
   - Now navigate to your load balancer's public DNS in your browser. Do you see this splash page? Awesome! As the splash page suggests, we need to configure some files.
 
@@ -224,7 +223,7 @@ sudo apt install nginx
 
 The upstream directive 
 
-```
+```bash
 upstream myFancyApp {
   least_conn; 
   server <yourService'sPublicDNS>:<yourPort>;
@@ -296,6 +295,10 @@ server.js
 
 ``` js
 // Our Imports, install any packages that you do not have already
+const express = require('express');
+const app = express();
+const browserify = require('browserify');
+
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
 
@@ -304,6 +307,8 @@ const DOM = require('react-dom-factories')
 const body = DOM.body;
 const div = DOM.div;
 const script = DOM.script;
+
+const Service = React.createFactory(require('../client/components/App'));
 
 let html = ReactDOMServer.renderToStaticMarkup(
   body(
@@ -325,21 +330,16 @@ let html = ReactDOMServer.renderToStaticMarkup(
     script({src: 'https://cdn.jsdelivr.net/npm/react-dom-factories@1.0.2/index.min.js'}),
     script({src: 'https://cdn.jsdelivr.net/npm/create-react-class@15.6.3/create-react-class.min.js'}),
   )
-)
+);
 
-const Service = React.createFactory(require('../client/components/App'));
-
+app.get('/', (req, res) => res.send(html));
 ```
 
 # Resources
 
-[Super awesome resource that helped me write Service guide](https://medium.com/@nishankjaintdk/setting-up-a-node-js-app-on-a-linux-ami-on-an-aws-ec2-instance-with-nginx-59cbc1bcc68c)
+[Super awesome resource that helped me write the service guide](https://medium.com/@nishankjaintdk/setting-up-a-node-js-app-on-a-linux-ami-on-an-aws-ec2-instance-with-nginx-59cbc1bcc68c)
 
 [Nginx.org docs for HTTP load balancing](http://nginx.org/en/docs/http/load_balancing.html)
-
-[The amazing Nginx docs that should be the gold model of documentation](https://docs.nginx.com/nginx/deployment-guides/amazon-web-services/ec2-instances-for-nginx/)
-
-[Stack Overflow post on Nginx and Mongo](https://stackoverflow.com/questions/31853755/how-to-setup-mongodb-behind-nginx-reverse-proxy)
 
 [Nginx docs on location](https://nginx.org/en/docs/http/ngx_http_core_module.html#location)
 
