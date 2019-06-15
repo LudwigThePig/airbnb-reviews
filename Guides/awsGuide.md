@@ -208,7 +208,7 @@ For this tutorial, we will be using Nginx to implement an active-active load bal
 
 1. Create another t2.micro instance with an Ubuntu AMI and expose port 80.
   - You cannot run Nginx with Amazon Linux distro. Nginx recommends Ubuntu.
-  - For ubuntu, your SSH command will be slightly different. Instead of `... ec-user@<publicDNS>`, your username will be 'ubuntu. So, you would write `... ubunutu@<publicDNS>`. 
+  - For ubuntu, your SSH command will be slightly different. Instead of `... ec-user@<publicDNS>`, your username will be 'ubuntu. So, you would write `... ubuntu@<publicDNS>`. 
 2. SSH into your instance, update everything and install Nginx.
 
 ```c
