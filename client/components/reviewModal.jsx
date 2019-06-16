@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import ReviewsModalBody from './reviewsModalBody.jsx';
+import ReviewsModalBody from './reviewsModalBody';
 
 const ModalInner = styled.div`
   &&& { 

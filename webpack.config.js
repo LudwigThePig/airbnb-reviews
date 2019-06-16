@@ -1,11 +1,11 @@
 const path = require('path');
 
-const inputPath = path.join(__dirname, 'client', 'server.js');
-const serverInputPath = path.join(__dirname, 'server')
+const inputPath = path.join(__dirname, 'client', 'index.jsx');
+const serverInputPath = path.join(__dirname, 'server', 'server.js')
 const outputPath = path.join(__dirname, 'public');
 
 const clientConfig = {
-  entry: `${inputPath}/index.jsx`,
+  entry: inputPath,
   output: {
     path: outputPath,
     filename: 'bundle.js'
@@ -52,4 +52,4 @@ const serverConfig = {
   }
 }
 
-module.exports = [clientConfig, serverConfig];
+module.exports = clientConfig//, serverConfig];

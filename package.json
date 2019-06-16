@@ -5,6 +5,7 @@
   "main": "server/server.js",
   "type": "module",
   "dependencies": {
+    "@babel/cli": "^7.0.0",
     "@quickbaseoss/babel-plugin-styled-components-css-namespace": "^1.0.0-rc",
     "aws-sdk": "^2.461.0",
     "axios": "^0.19.0",
@@ -32,16 +33,14 @@
     "underscore": "^1.9.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.4",
-    "@babel/preset-env": "^7.4.4",
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
-    "babel-core": "^6.26.3",
-    "babel-jest": "^24.8.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.4.2",
     "babel-loader": "^8.0.6",
     "babel-plugin-styled-components": "^1.10.0",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.13.1",
     "faker": "^4.1.0",
@@ -73,6 +72,7 @@
     "seed2": "psql -d postgres -U postgres -f insert2.sql",
     "seedMongo": "server/mongo/seed.py",
     "build": "webpack",
+    "transpile": "babel client/components --out-dir babelDist",
     "ssr": "webpack && concurrently \"webpack --watch\" \"nodemon server/server.js\""
   },
   "repository": {

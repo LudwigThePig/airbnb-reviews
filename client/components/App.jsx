@@ -2,9 +2,9 @@ import React from 'react';
 import moment from 'moment';
 import Axios from 'axios';
 import styled from 'styled-components';
-import Reviews from './reviews.jsx';
-import ReviewModal from './reviewModal.jsx';
-import styles from '../main.scss';
+import Reviews from './reviews';
+import ReviewModal from './reviewModal';
+// import styles from '../main.scss';
 
 const ModalProp = styled.div`
   &&& {
