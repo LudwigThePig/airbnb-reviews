@@ -13,9 +13,9 @@ var _axios = _interopRequireDefault(require("axios"));
 
 var _styledComponents = _interopRequireDefault(require("styled-components"));
 
-var _reviews = _interopRequireDefault(require("./reviews"));
+var _reviews = _interopRequireDefault(require("./reviews.js"));
 
-var _reviewModal = _interopRequireDefault(require("./reviewModal"));
+var _reviewModal = _interopRequireDefault(require("./reviewModal.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 

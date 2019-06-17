@@ -6,13 +6,11 @@ var _enzyme = require("enzyme");
 
 var _moment = _interopRequireDefault(require("moment"));
 
-var _App = _interopRequireDefault(require("./App"));
+var _App = _interopRequireDefault(require("./App.js"));
 
-var _reviewModal = _interopRequireDefault(require("./reviewModal"));
+var _reviewModal = _interopRequireDefault(require("./reviewModal.js"));
 
-var _App2 = _interopRequireDefault(require("./App.jsx"));
-
-var _reviewsModalBody = _interopRequireDefault(require("./reviewsModalBody"));
+var _reviewsModalBody = _interopRequireDefault(require("./reviewsModalBody.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -41,7 +39,7 @@ describe('Modal', function () {
         return String((0, _moment["default"])(new Date(date)).fromNow());
       }
     }));
-    wrapper.find(_App2["default"]).simulate('click');
+    wrapper.find(_App["default"]).simulate('click');
     expect(reviewsModalBody.find('#modalText').text()).toEqual('someting');
   });
 });

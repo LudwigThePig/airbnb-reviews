@@ -10,6 +10,9 @@ const clientConfig = {
     path: outputPath,
     filename: 'bundle.js'
   },
+  resolve: {
+    extensions: ['*', '.js', '.jsx']
+  },
   mode: 'development',
   module: {
     rules: [
