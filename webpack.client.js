@@ -1,15 +1,13 @@
 const path = require('path');
 const webpack = require('webpack');
-const nodeExternals = require('webpack-node-externals');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     mode: 'development',
-    target: 'node',
-    externals: [nodeExternals()],
-    entry: ['./server/server.js'],
+    entry: ['./src/client/index.js'],
     output: {
-        path: path.resolve(__dirname, 'bin'),
-        filename: 'server.js',
+        path: path.resolve(__dirname, 'public'),
+        filename: 'bundle.js',
         publicPath: '/'
     },
     module: {
@@ -29,11 +27,11 @@ module.exports = {
             },
             {
                 test: /\.scss$/,
-                loader: 'ignore-loader'
+                use: ExtractTextPlugin.extract(['css-loader', 'sass-loader'])
             },
             {
                 test: /\.css$/,
-                loader: 'ignore-loader'
+                use: ExtractTextPlugin.extract(['css-loader'])
             },
             {
                 test: /\.(jpg|png|svg|gif|pdf)$/,
@@ -43,5 +41,8 @@ module.exports = {
                 }
             }
         ]
-    }
+    },
+    plugins: [
+        new ExtractTextPlugin('styles.css')
+    ]
 };

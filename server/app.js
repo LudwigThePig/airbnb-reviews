@@ -5,12 +5,14 @@ const database = require('./dbrouter.js');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const fs = require('fs');
 
 // Crazy SSR stuff
 const React = require('react');
-const ReactDOMServer = require('react-dom/server');
-const TranspiledApp = require('../babelDist/App.js').default;
+// const ReactDOMServer = require('react-dom/server');
+// const TranspiledApp = require('../babelDist/App.js').default;
 // const RawApp = React.createFactory(require('../client/components/App.jsx'));
+// const renderer = require('./renderer.js')
 
 // Configuration
 const app = express();
@@ -22,9 +24,14 @@ app.use(cors());
 
 // More crazy SSR stuff
 app.get('/ssr', (req, res) => {
-  const html = ReactDOMServer.renderToStaticMarkup(TranspiledApp);
-  console.log(html);
-  console.log(React.isValidElement(TranspiledApp))
+  // const html = ReactDOMServer.renderToStaticMarkup(TranspiledApp);
+  // console.log(html);
+  // console.log(React.isValidElement(TranspiledApp))
+  fs.readFile('../public/index.html', 'utf-8', (err, data) => {
+    if(err) {
+      res.status(400).send(err);
+    }
+  });
   res.send(html);
 });
 
