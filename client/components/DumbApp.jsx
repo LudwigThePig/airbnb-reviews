@@ -2,15 +2,6 @@ import React from 'react';
 import moment from 'moment';
 import Axios from 'axios';
 import styled from 'styled-components';
-import Reviews from './reviews';
-import ReviewModal from './reviewModal';
-// import styles from '../main.scss';
-
-const ModalProp = styled.div`
-  &&& {
-    opacity: ${props => props.isModalShowing ? "0.5" : "1.0"};
-  }
-`;
 
 class App extends React.Component {
   constructor(props) {
@@ -76,7 +67,7 @@ class App extends React.Component {
         <div id="rApp">
           <div className="rBodyContainer">
             <div className="rModalContainer">
-              <ReviewModal
+              {/* <ReviewModal
                 id="modal"
                 isModalShowing={this.state.isModalShowing}
                 isModalSelected={this.state.isModalSelected}
@@ -84,35 +75,8 @@ class App extends React.Component {
                 toggleModal={this.toggleModal}
                 reviews={this.state.reviews}
                 formatDate={this.formatDate}
-              />
+              /> */}
               <p>Bob is your uncle!</p>
-            </div>
-            <div
-              className="rPageContainer"
-              onClick={() => this.toggleModal()}
-            >
-              <ModalProp isModalShowing={this.state.isModalShowing}>
-                <hr />
-                <div className="rPaddingTop">
-                  <h1 className="rReviewTitle">Reviews</h1>
-                  <Reviews
-                    isModalShowing={this.state.isModalShowing}
-                    toggleModal={this.toggleModal}
-                    reviews={this.state.reviews}
-                    formatDate={this.formatDate}
-                  />
-                  <div className="rModalButtonContainer">
-                    <a
-                      className="rMoreReviews"
-                      id="moreReviews"
-                      style={{ 'color': '#914669' }}
-                      onClick={this.toggleModal}
-                    >
-                      Read all {this.state.reviews.length} reviews
-                    </a>
-                  </div>
-                </div>
-              </ModalProp>
             </div>
             <hr />
           </div>

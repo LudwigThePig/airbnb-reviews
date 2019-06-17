@@ -42,14 +42,10 @@ const serverConfig = {
   module: {
     rules: [
       {
-        test: /\.s?css$/,
-        use: ['style-loader', 'css-loader', 'sass-loader']
-      },
-      {
         test: /js$/,
         exclude: /(node_modules)/,
-        loader: "babel-loader",
-        query: { presets: ["react-app"] }
+        loader: 'babel-loader',
+        query: { presets: ['react'] }
       }
     ]
   }

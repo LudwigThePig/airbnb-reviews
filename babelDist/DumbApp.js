@@ -13,10 +13,6 @@ var _axios = _interopRequireDefault(require("axios"));
 
 var _styledComponents = _interopRequireDefault(require("styled-components"));
 
-var _reviews = _interopRequireDefault(require("./reviews"));
-
-var _reviewModal = _interopRequireDefault(require("./reviewModal"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -36,23 +32,6 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n  &&& {\n    opacity: ", ";\n  }\n"]);
-
-  _templateObject = function _templateObject() {
-    return data;
-  };
-
-  return data;
-}
-
-function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
-
-// import styles from '../main.scss';
-var ModalProp = _styledComponents["default"].div(_templateObject(), function (props) {
-  return props.isModalShowing ? "0.5" : "1.0";
-});
 
 var App =
 /*#__PURE__*/
@@ -128,8 +107,6 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
-
       return _react["default"].createElement("div", {
         className: "Reviews"
       }, _react["default"].createElement("div", {
@@ -138,40 +115,7 @@ function (_React$Component) {
         className: "rBodyContainer"
       }, _react["default"].createElement("div", {
         className: "rModalContainer"
-      }, _react["default"].createElement(_reviewModal["default"], {
-        id: "modal",
-        isModalShowing: this.state.isModalShowing,
-        isModalSelected: this.state.isModalSelected,
-        selectModal: this.selectModal,
-        toggleModal: this.toggleModal,
-        reviews: this.state.reviews,
-        formatDate: this.formatDate
-      }), _react["default"].createElement("p", null, "Bob is your uncle!")), _react["default"].createElement("div", {
-        className: "rPageContainer",
-        onClick: function onClick() {
-          return _this3.toggleModal();
-        }
-      }, _react["default"].createElement(ModalProp, {
-        isModalShowing: this.state.isModalShowing
-      }, _react["default"].createElement("hr", null), _react["default"].createElement("div", {
-        className: "rPaddingTop"
-      }, _react["default"].createElement("h1", {
-        className: "rReviewTitle"
-      }, "Reviews"), _react["default"].createElement(_reviews["default"], {
-        isModalShowing: this.state.isModalShowing,
-        toggleModal: this.toggleModal,
-        reviews: this.state.reviews,
-        formatDate: this.formatDate
-      }), _react["default"].createElement("div", {
-        className: "rModalButtonContainer"
-      }, _react["default"].createElement("a", {
-        className: "rMoreReviews",
-        id: "moreReviews",
-        style: {
-          'color': '#914669'
-        },
-        onClick: this.toggleModal
-      }, "Read all ", this.state.reviews.length, " reviews"))))), _react["default"].createElement("hr", null))));
+      }, _react["default"].createElement("p", null, "Bob is your uncle!")), _react["default"].createElement("hr", null))));
     }
   }]);
 

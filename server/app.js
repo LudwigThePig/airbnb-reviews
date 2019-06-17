@@ -7,13 +7,10 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 // Crazy SSR stuff
-const browserify = require('browserify');
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
-const DumbApp = require('../babelDist/app.js');
-const DOM = require('react-dom-factories');
-const body = DOM.body, div = DOM.div, script = DOM.script
-
+const TranspiledApp = React.createFactory(require('../babelDist/App.js').default)
+const RawApp = React.createFactory(require('../client/components/App.jsx'));
 
 // Configuration
 const app = express();
@@ -25,8 +22,9 @@ app.use(cors());
 
 // More crazy SSR stuff
 app.get('/ssr', (req, res) => {
-  const html = ReactDOMServer.renderToStaticMarkup(DumbApp);
+  const html = ReactDOMServer.renderToStaticMarkup(TranspiledApp);
   console.log(html);
+  console.log(React.isValidElement(TranspiledApp))
   res.send(html);
 });
 
