@@ -9,7 +9,7 @@ const cors = require('cors');
 // Crazy SSR stuff
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
-const TranspiledApp = React.createFactory(require('../babelDist/App.js').default)
+const TranspiledApp = require('../babelDist/App.js').default;
 // const RawApp = React.createFactory(require('../client/components/App.jsx'));
 
 // Configuration
