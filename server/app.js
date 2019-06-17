@@ -10,7 +10,7 @@ const cors = require('cors');
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
 const TranspiledApp = React.createFactory(require('../babelDist/App.js').default)
-const RawApp = React.createFactory(require('../client/components/App.jsx'));
+// const RawApp = React.createFactory(require('../client/components/App.jsx'));
 
 // Configuration
 const app = express();
