@@ -17,7 +17,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      reviews: props.data,
+      reviews: props,
       isModalShowing: false,
       isModalSelected: false
     };

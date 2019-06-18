@@ -24,7 +24,7 @@ app.use(cors());
 
 
 // More crazy SSR stuff
-app.get('/ssr', (req, res) => {
+app.get('*', (req, res) => {
   fs.readFile('./server/coolerIndex.html', 'utf-8', (err, file) => {
     if(err) {
       res.status(400).send(err);
@@ -35,7 +35,6 @@ app.get('/ssr', (req, res) => {
           .json({message: err});
         return;
       }
-      // res.json(data);
       const html = renderer(file, data);
       res.send(html);
     });

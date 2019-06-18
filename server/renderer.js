@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/server";
-import App from "../client/components/App.jsx";
+import App from "../client/components/DumbApp.jsx";
 
 export default function renderer(html, data) {
   const serverHtml = ReactDOM.renderToString(<App data={data} />);
