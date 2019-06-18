@@ -18,7 +18,6 @@ const SvgBox = styled.div`
 `;
 
 const ReviewModal = ({ isModalShowing, isModalSelected, selectModal, reviews, formatDate, toggleModal }) => {
-
   return (
     <div className="Reviews">
       <div id="rModal">

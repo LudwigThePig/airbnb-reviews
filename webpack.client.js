@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const MiniCSS = require('mini-css-extract-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
     mode: 'development',
@@ -59,9 +60,16 @@ module.exports = {
         ]
     },
     plugins: [
+        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
         new MiniCSS({
           filename: '[name].css',
           chunkFilename: '[id].css'
-        })
+        }),
+        new BundleAnalyzerPlugin(),
+        new webpack.DefinePlugin({
+            'process.env': {
+              'NODE_ENV': JSON.stringify('production')
+            }
+          }),
     ]
 };
