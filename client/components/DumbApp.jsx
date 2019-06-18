@@ -2,7 +2,6 @@ import React from 'react';
 import Reviews from './reviews';
 import ReviewModal from './reviewModal';
 import styled from 'styled-components';
-import { blockStatement } from '@babel/types';
 
 const ModalProp = styled.div`
   &&& {
