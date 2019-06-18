@@ -6,13 +6,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const fs = require('fs');
+const port = 3004;
+const MongoClient = require('mongodb').MongoClient;
+const url = process.env.MONGO_CONNECTION || 'mongodb://localhost:27017/airbnb_reviews';
+const path = require('path');
 
 // Crazy SSR stuff
-const React = require('react');
-// const ReactDOMServer = require('react-dom/server');
-// const TranspiledApp = require('../babelDist/App.js').default;
-// const RawApp = React.createFactory(require('../client/components/App.jsx'));
-// const renderer = require('./renderer.js')
+
+import renderer from './renderer';
 
 // Configuration
 const app = express();
@@ -27,12 +28,13 @@ app.get('/ssr', (req, res) => {
   // const html = ReactDOMServer.renderToStaticMarkup(TranspiledApp);
   // console.log(html);
   // console.log(React.isValidElement(TranspiledApp))
-  fs.readFile('../public/index.html', 'utf-8', (err, data) => {
+  fs.readFile('./server/coolerIndex.html', 'utf-8', (err, data) => {
     if(err) {
       res.status(400).send(err);
     }
+    const html = renderer(data);
+    res.send(html);
   });
-  res.send(html);
 });
 
 // Routes
@@ -49,4 +51,13 @@ app.get('/api/listings/reviews/:id', (req, res) => {
   });
 });
 
-module.exports = app;
+MongoClient.connect(url, { useNewUrlParser: true }, (err, db) => {
+  if (err) {
+    return console.error(err);
+  }
+  global.db = db;
+  app.listen(port, () => {
+    console.log(`Listening on localhost:${port} with Mongo in ${process.env.NODE_ENV} mode`);
+  });
+});
+// module.exports = app;

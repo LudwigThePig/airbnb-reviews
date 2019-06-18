@@ -6,38 +6,59 @@ module.exports = {
     mode: 'development',
     target: 'node',
     externals: [nodeExternals()],
-    entry: ['./server/server.js'],
+    entry: ['./server/app.js'],
+    resolve: {
+        extensions: ['*', '.js', '.jsx']
+    },
     output: {
-        path: path.resolve(__dirname, 'bin'),
-        filename: 'server.js',
+        path: path.resolve(__dirname),
+        filename: 'coolerServer.js',
         publicPath: '/'
     },
     module: {
         rules: [
             {
-                test: /.jsx*$/,
+                test: /.js$/,
+                exclude: /node_modules/,
                 loader: 'babel-loader',
                 include: path.resolve(__dirname, 'client'),
-                exclude: /node_modules/,
                 options: {
                     presets: [['env', { modules: false }], 'react'],
                     plugins: [
-                      ['transform-object-rest-spread', { useBuiltIns: true }],
-                      'transform-class-properties']
+                        ['transform-object-rest-spread', { useBuiltIns: true }],
+                        'transform-class-properties'
+                    ]
                 }
             },
             {
-                test: /.js$/,
-                loader: 'babel-loader',
-                include: path.resolve(__dirname, 'client'),
-                exclude: /node_modules/,
-                options: {
-                    presets: [['env', { modules: false }], 'react'],
-                    plugins: [
-                      ['transform-object-rest-spread', { useBuiltIns: true }],
-                      'transform-class-properties']
-                }
-            },
+              test: /\.jsx?$/,
+              loader: 'babel-loader',
+              exclude: /node_modules/,
+          },
+            // {
+            //     test: /.jsx*$/,
+            //     loader: 'babel-loader',
+            //     include: path.resolve(__dirname, 'client'),
+            //     exclude: /node_modules/,
+            //     options: {
+            //         presets: [['env', { modules: false }], 'react'],
+            //         plugins: [
+            //           ['transform-object-rest-spread', { useBuiltIns: true }],
+            //           'transform-class-properties']
+            //     }
+            // },
+            // {
+            //     test: /.js$/,
+            //     loader: 'babel-loader',
+            //     include: path.resolve(__dirname, 'client'),
+            //     exclude: /node_modules/,
+            //     options: {
+            //         presets: [['env', { modules: false }], 'react'],
+            //         plugins: [
+            //           ['transform-object-rest-spread', { useBuiltIns: true }],
+            //           'transform-class-properties']
+            //     }
+            // },
             {
                 test: /\.scss$/,
                 loader: 'ignore-loader'

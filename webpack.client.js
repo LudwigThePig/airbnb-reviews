@@ -1,10 +1,11 @@
 const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCSS = require('mini-css-extract-plugin');
 
 module.exports = {
     mode: 'development',
-    entry: ['./src/client/index.js'],
+    resolve: { extensions: [".jsx", ".js", ".json"] },
+    entry: ['./client/ssrIndex.jsx'],
     output: {
         path: path.resolve(__dirname, 'public'),
         filename: 'bundle.js',
@@ -13,9 +14,9 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /.js$/,
+                test: /\.js$/,
                 loader: 'babel-loader',
-                include: path.resolve(__dirname, 'src'),
+                include: path.resolve(__dirname, 'client'),
                 exclude: /node_modules/,
                 options: {
                     presets: [['env', { modules: false }], 'react'],
@@ -26,12 +27,27 @@ module.exports = {
                 }
             },
             {
+              test: /\.jsx$/,
+              loader: 'babel-loader',
+              exclude: /node_modules/,
+          },
+            {
                 test: /\.scss$/,
-                use: ExtractTextPlugin.extract(['css-loader', 'sass-loader'])
+                use: [
+                  {loader: MiniCSS.loader},
+                  'css-loader',
+                  'sass-loader'
+                ]
+                // use: ExtractTextPlugin.extract(['css-loader', 'sass-loader'])
             },
             {
                 test: /\.css$/,
-                use: ExtractTextPlugin.extract(['css-loader'])
+                use: [
+                  {loader: MiniCSS.loader},
+                  'css-loader',
+                  'sass-loader'
+                ]
+                // use: ExtractTextPlugin.extract(['css-loader'])
             },
             {
                 test: /\.(jpg|png|svg|gif|pdf)$/,
@@ -43,6 +59,9 @@ module.exports = {
         ]
     },
     plugins: [
-        new ExtractTextPlugin('styles.css')
+        new MiniCSS({
+          filename: '[name].css',
+          chunkFilename: '[id].css'
+        })
     ]
 };
