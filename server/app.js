@@ -18,13 +18,13 @@ import renderer from './renderer';
 // Configuration
 const app = express();
 // Middleware
-app.use(express.static('public'));
+// app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(cors());
 
 
 // More crazy SSR stuff
-app.get('*', (req, res) => {
+app.get('/', (req, res) => {
   fs.readFile('./server/coolerIndex.html', 'utf-8', (err, file) => {
     if(err) {
       res.status(400).send(err);
@@ -44,7 +44,6 @@ app.get('*', (req, res) => {
 // Routes
 app.get('/api/listings/reviews/:id', (req, res) => {
   let listing_id = req.params.id;
-  console.log('we made it!')
   database.getReviews(listing_id, (err, data) => {
     if (err) {
       res.status(400)
