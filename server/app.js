@@ -25,15 +25,20 @@ app.use(cors());
 
 // More crazy SSR stuff
 app.get('/ssr', (req, res) => {
-  // const html = ReactDOMServer.renderToStaticMarkup(TranspiledApp);
-  // console.log(html);
-  // console.log(React.isValidElement(TranspiledApp))
-  fs.readFile('./server/coolerIndex.html', 'utf-8', (err, data) => {
+  fs.readFile('./server/coolerIndex.html', 'utf-8', (err, file) => {
     if(err) {
       res.status(400).send(err);
     }
-    const html = renderer(data);
-    res.send(html);
+    database.getReviews(100, (err, data) => {
+      if (err) {
+        res.status(400)
+          .json({message: err});
+        return;
+      }
+      // res.json(data);
+      const html = renderer(file, data);
+      res.send(html);
+    });
   });
 });
 
@@ -60,4 +65,3 @@ MongoClient.connect(url, { useNewUrlParser: true }, (err, db) => {
     console.log(`Listening on localhost:${port} with Mongo in ${process.env.NODE_ENV} mode`);
   });
 });
-// module.exports = app;

@@ -17,7 +17,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      reviews: [],
+      reviews: props.data,
       isModalShowing: false,
       isModalSelected: false
     };
@@ -49,9 +49,9 @@ class App extends React.Component {
     return reviews.sort((a, b) => new Date(b.date) - new Date(a.date));
   }
 
-  componentDidMount() {
+  componentWillMount() {
     Axios({
-      url: `http://${document.location.hostname}:3004/api/listings/reviews/${Math.floor(Math.random() * 999999 / 2) + 499980}`,
+      url: `http://ec2-54-202-47-91.us-west-2.compute.amazonaws.com/api/listings/reviews/${Math.floor(Math.random() * 999999 / 2) + 499980}`,
       method: 'GET',
       headers: {
         'Accepts': 'application/json',
@@ -85,7 +85,6 @@ class App extends React.Component {
                 reviews={this.state.reviews}
                 formatDate={this.formatDate}
               />
-              <p>Bob is your uncle!</p>
             </div>
             <div
               className="rPageContainer"

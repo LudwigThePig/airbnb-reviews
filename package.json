@@ -74,8 +74,9 @@
     ]
   },
   "scripts": {
-    "start": "run-p build:client build:server start:server",
+    "start": "run-p build:client build:server start:transpiled",
     "start:server": "nodemon server/server.js",
+    "start:transpiled": "nodemon coolerServer.js",
     "react-dev": "webpack -d --watch",
     "build:server": "webpack --config webpack.server.js --watch",
     "build:client": "webpack --config webpack.client.js --watch",
