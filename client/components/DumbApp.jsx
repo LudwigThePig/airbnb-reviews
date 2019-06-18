@@ -12,28 +12,20 @@ const ModalProp = styled.div`
 class App extends React.Component {
   
   static formatDate(date) {
-    var seconds = Math.floor((new Date() - date) / 1000);
-    var interval = Math.floor(seconds / 31536000);
-    if (interval > 1) {
-      return interval + " years";
+    console.log(date)
+    date = date.split('-')
+    const now = new Date();
+    const nowFormated= [now.getFullYear(), now.getMonth(), now.getDay()];
+    date = date.map((item, i) => nowFormated[i] - item);
+    if (date[0] > 1) {
+      return `${date[0]} years ago`;
+    } else if (date[0] === 1) {
+      return 'a year ago';
+    } else if (date[0] > 0) {
+      return `${date[1]} months ago`;
+    } else {
+      return 'recently';
     }
-    interval = Math.floor(seconds / 2592000);
-    if (interval > 1) {
-      return interval + " months";
-    }
-    interval = Math.floor(seconds / 86400);
-    if (interval > 1) {
-      return interval + " days";
-    }
-    interval = Math.floor(seconds / 3600);
-    if (interval > 1) {
-      return interval + " hours";
-    }
-    interval = Math.floor(seconds / 60);
-    if (interval > 1) {
-      return interval + " minutes";
-    }
-    return Math.floor(seconds) + " seconds";
   }
   
   constructor(props) {

@@ -12,7 +12,7 @@ const Review = ({ review, formatDate }) => {
               </div>
             </div>
             <div className="rViewBox">
-              {/* <span className="rReviewName reviewUser">{review.user}</span> */}
+              <span className="rReviewName reviewUser">{review.guest}</span>
               <div className="rReviewDate reviewDate">{formatDate(review.date)}</div>
             </div>
           </div>
