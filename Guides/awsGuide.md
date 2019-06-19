@@ -7,7 +7,7 @@ In this guide, you will learn how to deploy your database, service, and proxy to
 1. [Setting your database](#Databases)
 1. [Deploying your service](#Services)
 1. [Using a load balancer](#Load-Balancer)
-1. [Preparing for the proxy](#Proxy-Prep)
+1. [Preparing for the proxy](#Proxy)
 1. [Resources](#Resources)
 
 ---
@@ -284,56 +284,9 @@ Give it a couple of minutes to work its magic and, when it is done, click 'Launc
 
 You know what to do next. SSH back into your load balancer and add your snazy new URL to the upstream directive and that's it!
 
-# Proxy Prep
+# Proxy
 
 Just glue them together silly!
-
-[This section is EXTRA experimental. Proceed at your own risk.]
-
-
-server.js
-
-``` js
-// Our Imports, install any packages that you do not have already
-const express = require('express');
-const app = express();
-const browserify = require('browserify');
-
-const React = require('react');
-const ReactDOMServer = require('react-dom/server');
-
-const DOM = require('react-dom-factories')
-
-const body = DOM.body;
-const div = DOM.div;
-const script = DOM.script;
-
-const Service = React.createFactory(require('../client/components/App'));
-
-let html = ReactDOMServer.renderToStaticMarkup(
-  body(
-    null,
-    div({
-      id: 'reviews',
-      dangerouslySetInnerHTML: {
-        __html: ReactDOMServer.renderToSTring(Service())
-      }
-    }),
-    script({
-      dangerouslySetInnerHTML: {
-        __html: `var APP_PROPS = ${safeStringify(props)};`
-      }
-    }),
-    // React CDN. Faster downloads!
-    script({src: 'https://cdn.jsdelivr.net/npm/react@16.7.0/umd/react.production.min.js'}),
-    script({src: 'https://cdn.jsdelivr.net/npm/react-dom@16.7.0/umd/react-dom.production.min.js'}),
-    script({src: 'https://cdn.jsdelivr.net/npm/react-dom-factories@1.0.2/index.min.js'}),
-    script({src: 'https://cdn.jsdelivr.net/npm/create-react-class@15.6.3/create-react-class.min.js'}),
-  )
-);
-
-app.get('/', (req, res) => res.send(html));
-```
 
 # Resources
 
