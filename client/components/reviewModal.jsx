@@ -21,10 +21,10 @@ const ReviewModal = ({ isModalShowing, isModalSelected, selectModal, reviews, fo
   return (
     <div className="Reviews">
       <div id="rModal">
-        <ModalInner isModalShowing={isModalShowing} onClick={() => selectModal()}>
+        <ModalInner isModalShowing={isModalShowing} onClick={selectModal}>
           <div className="rModalInner">
             <div className="rModalHeader">
-              <button id="closeButton" className="rCloseButton" onClick={() => toggleModal()}>
+              <button id="closeButton" className="rCloseButton" onClick={toggleModal}>
                 <SvgBox isModalSelected={isModalSelected}>
                   <svg className="rSvgButton" viewBox=" 0 0 24 24">
                     <path d="m23.25 24c-.19 0-.38-.07-.53-.22l-10.72-10.72-10.72 10.72c-.29.29-.77.29-1.06 0s-.29-.77 0-1.06l10.72-10.72-10.72-10.72c-.29-.29-.29-.77 0-1.06s.77-.29 1.06 0l10.72 10.72 10.72-10.72c.29-.29.77-.29 1.06 0s .29.77 0 1.06l-10.72 10.72 10.72 10.72c.29.29.29.77 0 1.06-.15.15-.34.22-.53.22">

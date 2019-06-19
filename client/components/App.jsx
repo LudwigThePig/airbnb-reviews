@@ -69,7 +69,7 @@ class App extends React.Component {
     return reviews.sort((a, b) => new Date(b.date) - new Date(a.date));
   }
 
-  componentWillMount() {
+  componentMount() {
     Axios({
       url: `http://ec2-54-202-47-91.us-west-2.compute.amazonaws.com/api/listings/reviews/${Math.floor(Math.random() * 999999 / 2) + 499980}`,
       method: 'GET',

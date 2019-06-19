@@ -10,9 +10,7 @@ const ModalProp = styled.div`
 `;
 
 class App extends React.Component {
-  
   static formatDate(date) {
-    console.log(date)
     date = date.split('-')
     const now = new Date();
     const nowFormated= [now.getFullYear(), now.getMonth(), now.getDay()];
@@ -31,13 +29,17 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      reviews: props.data,
+      reviews: this.props.data,
       isModalShowing: false,
       isModalSelected: false
     };
 
     this.toggleModal = this.toggleModal.bind(this);
     this.selectModal = this.selectModal.bind(this);
+  }
+  componentWillMount(){
+    console.log(this.props)
+    // debugger;
   }
 
   toggleModal() {
@@ -71,7 +73,7 @@ class App extends React.Component {
             </div>
             <div
               className="rPageContainer"
-              onClick={() => this.toggleModal()}
+              onClick={this.toggleModal}
             >
               <ModalProp isModalShowing={this.state.isModalShowing}>
                 <hr />

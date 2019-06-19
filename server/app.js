@@ -18,21 +18,20 @@ import renderer from './renderer';
 // Configuration
 const app = express();
 // Middleware
-// app.use(express.static('public'));
+app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(cors());
 
 
 // More crazy SSR stuff
-app.get('/', (req, res) => {
-  fs.readFile('./server/coolerIndex.html', 'utf-8', (err, file) => {
+app.get('*', (req, res) => {
+  fs.readFile('./public/coolerIndex.html', 'utf-8', (err, file) => {
     if(err) {
       res.status(400).send(err);
     }
-    database.getReviews(101111, (err, data) => {
+    database.getReviews(23111, (err, data) => {
       if (err) {
-        res.status(400)
-          .json({message: err});
+        res.status(400).json({message: err});
         return;
       }
       const html = renderer(file, data);
