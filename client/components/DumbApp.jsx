@@ -56,7 +56,7 @@ class App extends React.Component {
       <div className="Reviews">
         <div id="rApp">
           <div className="rBodyContainer">
-            <div style={{display: this.state.isModalShowing ? 'block' : 'none'}} className="rModalContainer">
+            {/* <div style={{display: this.state.isModalShowing ? 'block' : 'none'}} className="rModalContainer">
               <ReviewModal 
                 id="modal"
                 isModalShowing={this.state.isModalShowing}
@@ -66,7 +66,7 @@ class App extends React.Component {
                 reviews={this.state.reviews}
                 formatDate={App.formatDate}
               />
-            </div>
+            </div> */}
             <div
               className="rPageContainer"
               onClick={this.toggleModal}

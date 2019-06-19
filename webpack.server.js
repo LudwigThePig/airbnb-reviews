@@ -34,31 +34,7 @@ module.exports = {
               test: /\.jsx?$/,
               loader: 'babel-loader',
               exclude: /node_modules/,
-          },
-            // {
-            //     test: /.jsx*$/,
-            //     loader: 'babel-loader',
-            //     include: path.resolve(__dirname, 'client'),
-            //     exclude: /node_modules/,
-            //     options: {
-            //         presets: [['env', { modules: false }], 'react'],
-            //         plugins: [
-            //           ['transform-object-rest-spread', { useBuiltIns: true }],
-            //           'transform-class-properties']
-            //     }
-            // },
-            // {
-            //     test: /.js$/,
-            //     loader: 'babel-loader',
-            //     include: path.resolve(__dirname, 'client'),
-            //     exclude: /node_modules/,
-            //     options: {
-            //         presets: [['env', { modules: false }], 'react'],
-            //         plugins: [
-            //           ['transform-object-rest-spread', { useBuiltIns: true }],
-            //           'transform-class-properties']
-            //     }
-            // },
+            },
             {
                 test: /\.scss$/,
                 loader: 'ignore-loader'

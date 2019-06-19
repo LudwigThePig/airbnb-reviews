@@ -71,7 +71,6 @@
     "react-dev": "webpack -d --watch",
     "build:server": "webpack --config webpack.server.js --watch",
     "build:client": "webpack --config webpack.client.js --watch",
-    "transpile": "babel client/components --out-dir babelDist",
     "loadtest": "loadtest -c 10 --rps 1000 http://localhost:3004/",
     "ssr": "webpack && concurrently \"webpack --watch\" \"nodemon server/server.js\""
   },
