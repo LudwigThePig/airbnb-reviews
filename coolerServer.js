@@ -154,29 +154,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var reac
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _renderer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./renderer */ \"./server/renderer.js\");\n// Imports\n__webpack_require__(/*! dotenv */ \"dotenv\").config();\n\n__webpack_require__(/*! newrelic */ \"newrelic\");\n\nvar database = __webpack_require__(/*! ./dbrouter.js */ \"./server/dbrouter.js\");\n\nvar express = __webpack_require__(/*! express */ \"express\");\n\nvar bodyParser = __webpack_require__(/*! body-parser */ \"body-parser\");\n\nvar cors = __webpack_require__(/*! cors */ \"cors\");\n\nvar fs = __webpack_require__(/*! fs */ \"fs\");\n\nvar port = 3004;\n\nvar MongoClient = __webpack_require__(/*! mongodb */ \"mongodb\").MongoClient;\n\nvar url = process.env.MONGO_CONNECTION || 'mongodb://localhost:27017/airbnb_reviews';\n\nvar path = __webpack_require__(/*! path */ \"path\"); // Crazy SSR stuff\n\n\n // Configuration\n\nvar app = express(); // Middleware\n\napp.use(express[\"static\"]('public'));\napp.use(bodyParser.json());\napp.use(cors()); // More crazy SSR stuff\n\napp.get('/proxy/:id', function (req, res) {\n  var listing = Math.floor(Number(req.params.id) / 10 || 900000);\n  var htmlPath = path.resolve('public', 'proxyString.html');\n  fs.readFile(htmlPath, 'utf-8', function (err, file) {\n    if (err) {\n      res.status(400).send(err);\n    }\n\n    database.getReviews(listing, function (err, data) {\n      if (err) {\n        res.status(400).json({\n          message: err\n        });\n        return;\n      }\n\n      var html = Object(_renderer__WEBPACK_IMPORTED_MODULE_0__[\"default\"])(file, data);\n      res.send(html);\n    });\n  });\n});\napp.get('/', function (req, res) {\n  fs.readFile('./public/coolerIndex.html', 'utf-8', function (err, file) {\n    if (err) {\n      res.status(400).send(err);\n    }\n\n    database.getReviews(23111, function (err, data) {\n      if (err) {\n        res.status(400).json({\n          message: err\n        });\n        return;\n      }\n\n      var html = Object(_renderer__WEBPACK_IMPORTED_MODULE_0__[\"default\"])(file, data);\n      res.send(html);\n    });\n  });\n}); // Routes\n\napp.get('/api/listings/reviews/:id', function (req, res) {\n  var listing_id = req.params.id;\n  database.getReviews(listing_id, function (err, data) {\n    if (err) {\n      res.status(400).json({\n        message: err\n      });\n      return;\n    }\n\n    res.json(data);\n  });\n});\nMongoClient.connect(url, {\n  useNewUrlParser: true\n}, function (err, db) {\n  if (err) {\n    return console.error(err);\n  }\n\n  global.db = db;\n  app.listen(port, function () {\n    console.log(\"Listening on localhost:\".concat(port, \" with Mongo in \").concat(\"development\", \" mode\"));\n  });\n});\n\n//# sourceURL=webpack:///./server/app.js?");
-
-/***/ }),
-
-/***/ "./server/db/index.js":
-/*!****************************!*\
-  !*** ./server/db/index.js ***!
-  \****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("/* eslint-disable no-console */\nvar _require = __webpack_require__(/*! pg */ \"pg\"),\n    Pool = _require.Pool;\n\nvar pool =  false ? undefined : new Pool({\n  user: 'postgres',\n  host: 'localhost',\n  database: 'airbnb_reviews',\n  password: 'rei',\n  port: '5432'\n});\n\nvar getReviews = function getReviews(id, db, cb) {\n  var queryString = \"SELECT * FROM reviews LIMIT 15 OFFSET \".concat(Number(id), \";\");\n  pool.query(queryString, function (err, result) {\n    if (err) {\n      console.log(err);\n      return cb(err, null);\n    }\n\n    return cb(null, result.rows);\n  });\n};\n\nmodule.exports = {\n  pool: pool,\n  getReviews: getReviews\n};\n\n//# sourceURL=webpack:///./server/db/index.js?");
-
-/***/ }),
-
-/***/ "./server/dbrouter.js":
-/*!****************************!*\
-  !*** ./server/dbrouter.js ***!
-  \****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var mongo = __webpack_require__(/*! ./mongo/index.js */ \"./server/mongo/index.js\");\n\nvar postgres = __webpack_require__(/*! ./db/index.js */ \"./server/db/index.js\");\n\nvar databaseChoice;\n\nif (process.env.DB === 'MONGO') {\n  databaseChoice = mongo;\n} else {\n  databaseChoice = postgres;\n}\n\nmodule.exports = databaseChoice;\n\n//# sourceURL=webpack:///./server/dbrouter.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _renderer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./renderer */ \"./server/renderer.js\");\n// Imports\n__webpack_require__(/*! dotenv */ \"dotenv\").config();\n\n__webpack_require__(/*! newrelic */ \"newrelic\");\n\nvar database = __webpack_require__(/*! ./mongo/index.js */ \"./server/mongo/index.js\");\n\nvar express = __webpack_require__(/*! express */ \"express\");\n\nvar bodyParser = __webpack_require__(/*! body-parser */ \"body-parser\");\n\nvar cors = __webpack_require__(/*! cors */ \"cors\");\n\nvar fs = __webpack_require__(/*! fs */ \"fs\");\n\nvar port = 3004;\n\nvar MongoClient = __webpack_require__(/*! mongodb */ \"mongodb\").MongoClient;\n\nvar url = process.env.MONGO_CONNECTION || 'mongodb://localhost:27017/airbnb_reviews';\n\nvar path = __webpack_require__(/*! path */ \"path\"); // Crazy SSR stuff\n\n\n // Configuration\n\nvar app = express(); // Middleware\n\napp.use(express[\"static\"]('public'));\napp.use(bodyParser.json());\napp.use(cors()); // More crazy SSR stuff\n\napp.get('/proxy/:id', function (req, res) {\n  var listing = Math.floor(Number(req.params.id) / 10 || 900000);\n  var htmlPath = path.resolve('public', 'proxyString.html');\n  fs.readFile(htmlPath, 'utf-8', function (err, file) {\n    if (err) {\n      res.status(400).send(err);\n    }\n\n    database.getReviews(listing, function (err, data) {\n      if (err) {\n        res.status(400).json({\n          message: err\n        });\n        return;\n      }\n\n      var html = Object(_renderer__WEBPACK_IMPORTED_MODULE_0__[\"default\"])(file, data);\n      res.send(html);\n    });\n  });\n});\napp.get('/', function (req, res) {\n  fs.readFile('./public/coolerIndex.html', 'utf-8', function (err, file) {\n    if (err) {\n      res.status(400).send(err);\n    }\n\n    database.getReviews(23111, function (err, data) {\n      if (err) {\n        res.status(400).json({\n          message: err\n        });\n        return;\n      }\n\n      var html = Object(_renderer__WEBPACK_IMPORTED_MODULE_0__[\"default\"])(file, data);\n      res.send(html);\n    });\n  });\n}); // Routes\n\napp.get('/api/listings/reviews/:id', function (req, res) {\n  var listing_id = req.params.id;\n  database.getReviews(listing_id, function (err, data) {\n    if (err) {\n      res.status(400).json({\n        message: err\n      });\n      return;\n    }\n\n    res.json(data);\n  });\n});\nMongoClient.connect(url, {\n  useNewUrlParser: true\n}, function (err, db) {\n  if (err) {\n    return console.error(err);\n  }\n\n  global.db = db;\n  app.listen(port, function () {\n    console.log(\"Listening on localhost:\".concat(port, \" with Mongo in \").concat(\"development\", \" mode\"));\n  });\n});\n\n//# sourceURL=webpack:///./server/app.js?");
 
 /***/ }),
 
@@ -299,17 +277,6 @@ eval("module.exports = require(\"newrelic\");\n\n//# sourceURL=webpack:///extern
 /***/ (function(module, exports) {
 
 eval("module.exports = require(\"path\");\n\n//# sourceURL=webpack:///external_%22path%22?");
-
-/***/ }),
-
-/***/ "pg":
-/*!*********************!*\
-  !*** external "pg" ***!
-  \*********************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("module.exports = require(\"pg\");\n\n//# sourceURL=webpack:///external_%22pg%22?");
 
 /***/ }),
 

@@ -1,7 +1,7 @@
 // Imports
 require('dotenv').config()
 require('newrelic');
-const database = require('./dbrouter.js');
+const database = require('./mongo/index.js');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
