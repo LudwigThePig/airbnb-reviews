@@ -24,6 +24,25 @@ app.use(cors());
 
 
 // More crazy SSR stuff
+app.get('/proxy/:id', (req, res) => {
+  const listing = req.params.id / 10 || 900000;
+  console.log(listing)
+  const htmlPath = path.resolve(__dirname, 'public', 'proxyString.html');
+  fs.readFile(htmlPath, 'utf-8', (err, file) => {
+    if(err) {
+      res.status(400).send(err);
+    }
+    database.getReviews(listing, (err, data) => {
+      if (err) {
+        res.status(400).json({message: err});
+        return;
+      }
+      const html = renderer(file, data);
+      res.send(html);
+    });
+  });
+})
+
 app.get('*', (req, res) => {
   fs.readFile('./public/coolerIndex.html', 'utf-8', (err, file) => {
     if(err) {
