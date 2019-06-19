@@ -75,7 +75,7 @@ start = datetime.now()
  
 connection = pymongo.MongoClient('mongodb://localhost:27017') 
 db = connection.airbnb_reviews
-collection = db.reviews2
+collection = db.reviews
 
 # Build the batch array
 batch_documents = [i for i in range(batch_number)]

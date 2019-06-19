@@ -10,7 +10,7 @@ cpu_count = multiprocessing.cpu_count()
  
 # Connect to the database
 client = pymongo.MongoClient('mongodb://localhost:27017') 
-collection = client.airbnb_reviews.reviews2
+collection = client.airbnb_reviews.reviews
  
 # Limits and insert counts
 total_documents_count = 10000000

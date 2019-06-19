@@ -1,6 +1,6 @@
 // Imports
 require('dotenv').config()
-// require('newrelic');
+require('newrelic');
 const database = require('./dbrouter.js');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -25,9 +25,8 @@ app.use(cors());
 
 // More crazy SSR stuff
 app.get('/proxy/:id', (req, res) => {
-  const listing = req.params.id / 10 || 900000;
-  console.log(listing)
-  const htmlPath = path.resolve(__dirname, 'public', 'proxyString.html');
+  const listing = Math.floor(Number(req.params.id) / 10 || 900000);
+  const htmlPath = path.resolve('public', 'proxyString.html');
   fs.readFile(htmlPath, 'utf-8', (err, file) => {
     if(err) {
       res.status(400).send(err);
@@ -43,7 +42,7 @@ app.get('/proxy/:id', (req, res) => {
   });
 })
 
-app.get('*', (req, res) => {
+app.get('/', (req, res) => {
   fs.readFile('./public/coolerIndex.html', 'utf-8', (err, file) => {
     if(err) {
       res.status(400).send(err);

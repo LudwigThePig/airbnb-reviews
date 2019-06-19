@@ -37,10 +37,6 @@ class App extends React.Component {
     this.toggleModal = this.toggleModal.bind(this);
     this.selectModal = this.selectModal.bind(this);
   }
-  componentWillMount(){
-    console.log(this.props)
-    // debugger;
-  }
 
   toggleModal() {
     this.setState({
