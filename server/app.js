@@ -58,18 +58,18 @@ app.get('/', (req, res) => {
   });
 });
 
-// Routes
-app.get('/api/listings/reviews/:id', (req, res) => {
-  let listing_id = req.params.id;
-  database.getReviews(listing_id, (err, data) => {
-    if (err) {
-      res.status(400)
-        .json({message: err});
-      return;
-    }
-    res.json(data);
-  });
-});
+// // Routes
+// app.get('/api/listings/reviews/:id', (req, res) => {
+//   let listing_id = req.params.id;
+//   database.getReviews(listing_id, (err, data) => {
+//     if (err) {
+//       res.status(400)
+//         .json({message: err});
+//       return;
+//     }
+//     res.json(data);
+//   });
+// });
 
 MongoClient.connect(url, { useNewUrlParser: true }, (err, db) => {
   if (err) {
